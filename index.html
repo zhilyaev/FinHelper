@@ -13,12 +13,12 @@
 <section class="container">
 	<div class="card">
 		<div class="card-header">
-			{{name}}
+			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp; {{name}}</h2>
 		</div>
 		<div class="card-body">
 			<fieldset id="goal" class="">
 				<div class="form-row">
-					<div class="col">
+					<div class="col-2">
 						<label for="cy">Валюта</label>
 						<select class="form-control custom-select" ng-model="cy" id="cy">
 							<option>₽</option>
@@ -28,9 +28,17 @@
 					</div>
 
 					<div class="col">
-						<label for="name">Название</label>
+						<label for="dream">Планируем</label>
 						<div class="input-group">
 							<span class="input-group-addon">{{cy}}</span>
+							<input class="form-control" min="0" type="number" id="dream">
+						</div>
+					</div>
+
+					<div class="col">
+						<label for="name">Название</label>
+						<div class="input-group">
+							<span class="input-group-addon"><img src="svg/si-glyph-square-star.svg" width="16"> </span>
 							<input ng-model="name" class="form-control" value="Цель 1" id="name">
 						</div>
 					</div>
