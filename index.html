@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+<br>
+<section class="container">
+	<div class="card">
+		<div class="card-header">
+			{{name}}
+		</div>
+		<div class="card-body">
+			<fieldset id="goal" class="">
+				<div class="form-row">
+					<div class="col">
+						<label for="cy">Валюта</label>
+						<select class="form-control custom-select" ng-model="cy" id="cy">
+							<option>₽</option>
+							<option>$</option>
+							<option>€</option>
+						</select>
+					</div>
+
+					<div class="col">
+						<label for="name">Название</label>
+						<div class="input-group">
+							<span class="input-group-addon">{{cy}}</span>
+							<input ng-model="name" class="form-control" value="Цель 1" id="name">
+						</div>
+					</div>
+
+					<div class="col">
+						<label for="date">Срок до</label>
+						<div class="input-group">
+							<label class="input-group-addon"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
+							<input class="form-control" type="date" id="date">
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset id="calculator">
+				<legend>Расчет</legend>
+				<form>
+					<div class="form-row">
+						<div class="col">
+							<label for="plus">Доход/месяц</label>
+							<div class="input-group">
+								<span class="input-group-addon">{{cy}}</span>
+								<input class="form-control" min="0" type="number" id="plus">
+							</div>
+						</div>
+
+						<div class="col">
+							<label for="minus">Расход/месяц</label>
+							<div class="input-group">
+								<span class="input-group-addon">{{cy}}</span>
+								<input class="form-control" min="0" type="number" id="minus">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="col">
+							<label for="invest">Инвестировать в месяц</label>
+							<div class="input-group">
+								<label class="input-group-addon">
+									%&nbsp;<input class="form-check-label" type="checkbox">
+								</label>
+								<input class="form-control" min="0" type="number" id="invest">
+							</div>
+						</div>
+
+						<div class="col">
+							<label for="rightNow">Сколько денег прямо сейчас?</label>
+							<div class="input-group">
+								<span class="input-group-addon">{{cy}}</span>
+								<input class="form-control" min="0" type="number" id="rightNow">
+							</div>
+						</div>
+					</div>
+					<br>
+					<input class="btn btn-secondary btn-block" type="reset">
+				</form>
+				<div class="page-header text-center">
+					<h1>Процент вклада: <small>0</small>%</h1>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+	<!--<button type="button" class="btn btn-primary btn-lg btn-block">Новая цель</button>-->
+</section>
+<script src="js/angular.min.js"></script>
+</body>
+</html>
