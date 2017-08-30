@@ -31,7 +31,7 @@
 						<label for="dream">Планируем</label>
 						<div class="input-group">
 							<span class="input-group-addon">{{cy}}</span>
-							<input class="form-control" min="0" type="number" id="dream">
+							<input class="form-control" min="0" type="number" ng-model="dream" id="dream">
 						</div>
 					</div>
 
@@ -47,7 +47,7 @@
 						<label for="date">Срок до</label>
 						<div class="input-group">
 							<label class="input-group-addon"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-							<input class="form-control" type="date" id="date">
+							<input class="form-control" type="date" ng-model="date" id="date">
 						</div>
 					</div>
 				</div>
@@ -60,7 +60,7 @@
 							<label for="plus">Доход/месяц</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" id="plus">
+								<input class="form-control" min="0" type="number" ng-model="plus" id="plus">
 							</div>
 						</div>
 
@@ -68,7 +68,14 @@
 							<label for="minus">Расход/месяц</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" id="minus">
+								<input class="form-control" min="0" type="number" ng-model="minus" id="minus">
+							</div>
+						</div>
+
+						<div class="col">
+							<label for="gain">Выручка</label>
+							<div class="input-group">
+								<input id="gain" value="{{plus-minus}}" type="number" disabled class="form-control">
 							</div>
 						</div>
 					</div>
@@ -78,9 +85,10 @@
 							<label for="invest">Инвестировать в месяц</label>
 							<div class="input-group">
 								<label class="input-group-addon">
-									%&nbsp;<input class="form-check-label" type="checkbox">
+									%&nbsp;<input disabled checked class="form-check-label" type="checkbox">
 								</label>
-								<input class="form-control" min="0" type="number" id="invest">
+								<input class="form-control" min="0" max="{{plus-minus}}" type="number" ng-model="invest" id="invest">
+								<span class="input-group-addon">{{(plus-minus)*(invest/100)}}</span>
 							</div>
 						</div>
 
@@ -88,7 +96,7 @@
 							<label for="rightNow">Сколько денег прямо сейчас?</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" id="rightNow">
+								<input class="form-control" min="0" type="number" ng-model="rightNow" id="rightNow">
 							</div>
 						</div>
 					</div>
