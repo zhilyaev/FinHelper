@@ -10,7 +10,7 @@
 </head>
 <body>
 <br>
-<section class="container">
+<section class="container" onchange="frodor()">
 	<div class="card">
 		<div class="card-header">
 			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{name}}</h2>
@@ -104,7 +104,7 @@
 					<input class="btn btn-secondary btn-block" type="reset">
 				</form>
 				<div class="page-header text-center">
-					<h1>Процент вклада: <small>0</small>%</h1>
+					<h1>Процент вклада: <small id="result">0</small>%</h1>
 				</div>
 			</fieldset>
 		</div>
@@ -112,5 +112,21 @@
 	<!--<button type="button" class="btn btn-primary btn-lg btn-block">Новая цель</button>-->
 </section>
 <script src="js/angular.min.js"></script>
+<script>
+	function frodor () {
+	    // Сколько раз в месяц можем вложить
+        var inCom = (document.getElementById("invest").value/100)*(document.getElementById("plus").value-document.getElementById("minus").value);
+        var readyToInvest = document.getElementById("rightNow").value;
+        var aimTotalMoney = document.getElementById("dream").value;
+
+        var aimTime = new Date (Date.parse(document.getElementById("date").value)-new Date()).getMonth();
+        var period = 1;
+
+        var moneyWithoutPercents = readyToInvest + inCom * aimTime;
+        var numberOfPeriods = aimTime / period;
+       document.getElementById("result").textContent=(Math.pow(aimTotalMoney / moneyWithoutPercents, 1 / numberOfPeriods)) - 1;
+    }
+
+</script>
 </body>
 </html>
