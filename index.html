@@ -10,7 +10,7 @@
 </head>
 <body>
 <br>
-<section class="container" onchange="frodor()">
+<section class="container" oninput="frodor()">
 	<div class="card">
 		<div class="card-header">
 			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{name}}</h2>
@@ -47,7 +47,7 @@
 						<label for="date">Срок до</label>
 						<div class="input-group">
 							<label class="input-group-addon"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-							<input class="form-control" type="date" ng-model="date" id="date">
+							<input class="form-control" value="2018-05-06" type="date" id="date">
 						</div>
 					</div>
 				</div>
@@ -87,8 +87,8 @@
 								<label class="input-group-addon">
 									%&nbsp;<input disabled checked class="form-check-label" type="checkbox">
 								</label>
-								<input class="form-control" min="0" max="{{plus-minus}}" type="number" ng-model="invest" id="invest">
-								<span class="input-group-addon">{{(plus-minus)*(invest/100)}}</span>
+								<input class="form-control" min="0" max="{{plus - minus}}" type="number" ng-model="invest" id="invest">
+								<span class="input-group-addon" id="inCom">{{(plus - minus)*(invest/100)}}</span>
 							</div>
 						</div>
 
@@ -109,23 +109,41 @@
 			</fieldset>
 		</div>
 	</div>
-	<!--<button type="button" class="btn btn-primary btn-lg btn-block">Новая цель</button>-->
 </section>
 <script src="js/angular.min.js"></script>
 <script>
-	function frodor () {
-	    // Сколько раз в месяц можем вложить
-        var inCom = (document.getElementById("invest").value/100)*(document.getElementById("plus").value-document.getElementById("minus").value);
-        var readyToInvest = document.getElementById("rightNow").value;
-        var aimTotalMoney = document.getElementById("dream").value;
+    function frodor() {
+        var inCom = parseInt(document.getElementById("inCom").textContent);
 
-        var aimTime = new Date (Date.parse(document.getElementById("date").value)-new Date()).getMonth();
-        var period = 1;
-
-        var moneyWithoutPercents = readyToInvest + inCom * aimTime;
-        var numberOfPeriods = aimTime / period;
-       document.getElementById("result").textContent=(Math.pow(aimTotalMoney / moneyWithoutPercents, 1 / numberOfPeriods)) - 1;
+        var aimTotalMoney = parseInt(document.getElementById("dream").value);
+        // Если поле пустое то пусть будет ноль
+        var readyToInvest = parseInt(document.getElementById("rightNow").value) || 0;
+		// Разница месяцев
+        var aimTime = dateDiff(new Date() ,new Date(Date.parse(document.getElementById("date").value)))[1];
+        var period = 12;
+        var isPercentSimple = true;
+        if(isPercentSimple) {
+            var moneyWithoutPercents = readyToInvest + inCom * aimTime;
+            var numberOfFullPeriods = aimTime/period;
+            var profit = (aimTotalMoney - moneyWithoutPercents) / numberOfFullPeriods;
+            var resultPercent = ((profit + moneyWithoutPercents) / moneyWithoutPercents - 1) * 100
+        }
+        //(Math.pow(aimTotalMoney / moneyWithoutPercents, 1 / numberOfPeriods)) - 1;
+        document.getElementById("result").textContent = resultPercent < 0 ? "Цель выполнится накоплением без вкладов." : resultPercent;
     }
+
+    function dateDiff( date1, date2 ) {
+        var years = date2.getFullYear() - date1.getFullYear();
+        var months = years * 12 + date2.getMonth() - date1.getMonth();
+        var days = date2.getDate() - date1.getDate();
+
+        years -= date2.getMonth() < date1.getMonth();
+        months -= date2.getDate() < date1.getDate();
+        days += days < 0 ? new Date( date2.getFullYear(), date2.getMonth() - 1, 0 ).getDate() + 1 : 0;
+
+        return [ years, months, days ];
+    }
+
 
 </script>
 </body>
