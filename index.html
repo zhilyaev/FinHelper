@@ -1,149 +1,198 @@
 <!DOCTYPE html>
 <html lang="en" data-ng-app ng-init="name='Цель 1';cy='₽'">
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body>
 <br>
 <section class="container" oninput="frodor()">
-	<div class="card">
-		<div class="card-header">
-			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{name}}</h2>
-		</div>
-		<div class="card-body">
-			<fieldset id="goal" class="">
-				<div class="form-row">
-					<div class="col-2">
-						<label for="cy">Валюта</label>
-						<select class="form-control custom-select" ng-model="cy" id="cy">
-							<option>₽</option>
-							<option>$</option>
-							<option>€</option>
-						</select>
-					</div>
+    <div class="card">
+        <div class="card-header">
+            <h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{name}}</h2>
+        </div>
+        <div class="card-body">
+            <fieldset id="goal" class="">
+                <div class="form-row">
+                    <div class="col-2">
+                        <label for="cy">Валюта</label>
+                        <select class="form-control custom-select" ng-model="cy" id="cy">
+                            <option>₽</option>
+                            <option>$</option>
+                            <option>€</option>
+                        </select>
+                    </div>
 
-					<div class="col">
-						<label for="dream">Планируем</label>
-						<div class="input-group">
-							<span class="input-group-addon">{{cy}}</span>
-							<input class="form-control" min="0" type="number" ng-model="dream" id="dream">
-						</div>
-					</div>
+                    <div class="col">
+                        <label for="dream">Планируем</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">{{cy}}</span>
+                            <input class="form-control" min="0" type="number" ng-model="dream" id="dream">
+                        </div>
+                    </div>
 
-					<div class="col">
-						<label for="name">Название</label>
-						<div class="input-group">
-							<span class="input-group-addon"><img src="svg/si-glyph-square-star.svg" width="16"> </span>
-							<input ng-model="name" class="form-control" value="Цель 1" id="name">
-						</div>
-					</div>
+                    <div class="col">
+                        <label for="name">Название</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><img src="svg/si-glyph-square-star.svg" width="16"> </span>
+                            <input ng-model="name" class="form-control" value="Цель 1" id="name">
+                        </div>
+                    </div>
 
-					<div class="col">
-						<label for="date">Срок до</label>
-						<div class="input-group">
-							<label class="input-group-addon"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-							<input class="form-control" value="2018-05-06" type="date" id="date">
-						</div>
-					</div>
-				</div>
-			</fieldset>
-			<fieldset id="calculator">
-				<legend>Расчет</legend>
-				<form>
-					<div class="form-row">
-						<div class="col">
-							<label for="plus">Доход/месяц</label>
-							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" ng-model="plus" id="plus">
-							</div>
-						</div>
+                    <div class="col">
+                        <label for="date">Срок до</label>
+                        <div class="input-group">
+                            <label class="input-group-addon"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
+                            <input class="form-control" value="2018-05-06" type="date" id="date">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset id="calculator">
+                <legend>Расчет</legend>
+                <form>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="plus">Доход/месяц</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">{{cy}}</span>
+                                <input class="form-control" min="0" type="number" ng-model="plus" id="plus">
+                            </div>
+                        </div>
 
-						<div class="col">
-							<label for="minus">Расход/месяц</label>
-							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" ng-model="minus" id="minus">
-							</div>
-						</div>
+                        <div class="col">
+                            <label for="minus">Расход/месяц</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">{{cy}}</span>
+                                <input class="form-control" min="0" type="number" ng-model="minus" id="minus">
+                            </div>
+                        </div>
 
-						<div class="col">
-							<label for="gain">Выручка</label>
-							<div class="input-group">
-								<input id="gain" value="{{plus-minus}}" type="number" disabled class="form-control">
-							</div>
-						</div>
-					</div>
+                        <div class="col">
+                            <label for="gain">Выручка</label>
+                            <div class="input-group">
+                                <input id="gain" value="{{plus-minus}}" type="number" disabled class="form-control">
+                            </div>
+                        </div>
+                    </div>
 
-					<div class="form-row">
-						<div class="col">
-							<label for="invest">Инвестировать в месяц</label>
-							<div class="input-group">
-								<label class="input-group-addon">
-									%&nbsp;<input disabled checked class="form-check-label" type="checkbox">
-								</label>
-								<input class="form-control" min="0" max="{{plus - minus}}" type="number" ng-model="invest" id="invest">
-								<span class="input-group-addon" id="inCom">{{(plus - minus)*(invest/100)}}</span>
-							</div>
-						</div>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="invest">Инвестировать в месяц</label>
+                            <div class="input-group">
+                                <label class="input-group-addon">
+                                    %&nbsp;<input disabled checked class="form-check-label" type="checkbox">
+                                </label>
+                                <input class="form-control" min="0" max="{{plus - minus}}" type="number"
+                                       ng-model="invest" id="invest">
+                                <span class="input-group-addon" id="inCom">{{(plus - minus)*(invest/100)}}</span>
+                            </div>
+                        </div>
 
-						<div class="col">
-							<label for="rightNow">Сколько денег прямо сейчас?</label>
-							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" ng-model="rightNow" id="rightNow">
-							</div>
-						</div>
-					</div>
-					<br>
-					<input class="btn btn-secondary btn-block" type="reset">
-				</form>
-				<div class="page-header text-center">
-					<h1>Процент вклада: <small id="result">0</small>%</h1>
-				</div>
-			</fieldset>
-		</div>
-	</div>
+                        <div class="col">
+                            <label for="rightNow">Сколько денег прямо сейчас?</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">{{cy}}</span>
+                                <input class="form-control" min="0" type="number" ng-model="rightNow" id="rightNow">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <input class="btn btn-secondary btn-block" type="reset">
+                </form>
+                <div class="page-header text-center">
+                    <h1>Процент вклада:
+                        <small id="result">0</small>
+                        %
+                    </h1>
+                </div>
+            </fieldset>
+        </div>
+    </div>
 </section>
 <script src="js/angular.min.js"></script>
 <script>
-    Date.diff = function (date1, date2){
+    Date.diff = function (date1, date2) {
         var years = date2.getFullYear() - date1.getFullYear();
         var months = years * 12 + date2.getMonth() - date1.getMonth();
         var days = date2.getDate() - date1.getDate();
 
         years -= date2.getMonth() < date1.getMonth();
         months -= date2.getDate() < date1.getDate();
-        days += days < 0 ? new Date( date2.getFullYear(), date2.getMonth() - 1, 0 ).getDate() + 1 : 0;
+        days += days < 0 ? new Date(date2.getFullYear(), date2.getMonth() - 1, 0).getDate() + 1 : 0;
 
-        return [ years, months, days ];
+        return [years, months, days];
     };
 
     function frodor() {
         var inCom = parseInt(document.getElementById("inCom").textContent);
-
         var aimTotalMoney = parseInt(document.getElementById("dream").value);
         // Если поле пустое то пусть будет ноль
-        var readyToInvest = parseInt(document.getElementById("rightNow").value) || 0;
-		// Разница месяцев
-        var aimTime = Date.diff(new Date() ,new Date(Date.parse(document.getElementById("date").value)))[1];
+        var totalToInvest = parseInt(document.getElementById("rightNow").value) || 0;
+        // Разница месяцев
+        var aimTime = Date.diff(new Date(), new Date(Date.parse(document.getElementById("date").value)))[1];
         var period = 12;
+
         var isPercentSimple = true;
-        if(isPercentSimple) {
-            var moneyWithoutPercents = readyToInvest + inCom * aimTime;
-            var numberOfFullPeriods = aimTime/period;
+        if (isPercentSimple) {
+            var moneyWithoutPercents = totalToInvest + inCom * aimTime;
+            var numberOfFullPeriods = aimTime / period;
             var profit = (aimTotalMoney - moneyWithoutPercents) / numberOfFullPeriods;
             var resultPercent = ((profit + moneyWithoutPercents) / moneyWithoutPercents - 1) * 100
         }
         //(Math.pow(aimTotalMoney / moneyWithoutPercents, 1 / numberOfPeriods)) - 1;
-        document.getElementById("result").textContent = resultPercent < 0 ? "Цель выполнится накоплением без вкладов." : resultPercent;
+
+        if (0 < resultPercent < 50) {
+            calculateDoc(inCom, resultPercent)
+        }
+        if (resultPercent < 0) {
+            resultPercent = "Цель выполнится накоплением без вкладов."
+        }
+        if (reservePerc > 50) {
+            resultPercent = "Выполнение цели недостижимо в данные сроки."
+        }
+        document.getElementById("result").textContent = resultPercent
+
     }
 
+    function calculateDoc(inCom, resultPercent) {
+        var consumption = parseInt(document.getElementById("minus").value)
+
+        //Percents for income divide
+        var brokerPerc = parseInt(document.getElementById("rightNow").value)
+        var pillowPerc = parseInt(document.getElementById("rightNow").value)
+        var reservePerc = parseInt(document.getElementById("rightNow").value)
+        //Can invest now
+        var totalToInvest = parseInt(document.getElementById("rightNow").value) || 0;
+        var brokerNow = parseInt(document.getElementById("rightNow").value)
+        var pillowNow = parseInt(document.getElementById("rightNow").value)
+        var reserveNow = parseInt(document.getElementById("rightNow").value)
+
+        var pillowMax = consumption * 6;
+        var reserveMax = consumption * (1.5);
+
+        var dateArr = new Array(Date.now())
+        var sumArr = new Array(totalToInvest)
+        var brokerArr = new Array(brokerNow)
+        var pillowArr = new Array(pillowNow)
+        var reserveArr = new Array(reserveNow)
+        var currentDate = Date.now()
+        var i = 0
+        while (currentDate < new Date(Date.parse(document.getElementById("date").value))) {
+            currentDate.setMonth(currentDate.getMonth() + 1)
+            dateArr.add(currentDate)
+            sumArr.add(sumArr[i] + inCom)
+            brokerArr.add(brokerArr[i] + inCom * brokerPerc)
+            pillowArr.add(pillowArr[i] + inCom * pillowPerc)
+            reserveArr.add(reserveArr[i] + inCom * reservePerc)
+
+            i++
+        }
+    }
 
 </script>
 </body>
