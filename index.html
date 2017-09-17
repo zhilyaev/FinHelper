@@ -30,7 +30,7 @@
 			<fieldset>
 				<div class="form-row">
 
-					<div class="col-1">
+					<div class="col col-1">
 						<label for="prior" title="Приоритет цели">Приоритет</label>
 						<select class="form-control custom-select" id="prior" v-model="prior">
 							<!-- Max prior = count of goals /* Это настолько ахуенно что я кончил */ -->
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 
-					<div class="col-2">
+					<div class="col col-1">
 						<label for="cy">Валюта</label>
 						<select class="form-control custom-select" id="cy" v-model="cy">
 							<option>₽</option>
@@ -193,7 +193,8 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Шаблоны -->
 <script type="x-template" id="tmpl-tab">
-	<a class="nav-item nav-link active" v-on:click="loadGoal()"  href="#">Цель #{{n}}
+	<a class="nav-item nav-link active"  href="#">
+		<span v-on:click="loadGoal()">{{name}} #{{n}}</span>
 		<button type="button"  v-on:click="deleteGoal()" class="close" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -202,22 +203,36 @@
 <script>
     // Дефолтные настройки
     const defaults = {
+        prior:1,
         cy:'₽',
         name:'Цель',
         // (Today + 1 year).parse("YYYY-mm-dd")
         date:new Date(new Date().setFullYear(new Date().getFullYear()+1)).yyyymmdd("-"),
         dream:"",
+
+        /* Базовые */
         inCom:"",
         expense:"",
         gain:0,
-	    prior:1,
+        /* / Базовые*/
+
+        /* Проценты */
 	    broker:0,
 	    brokerPercent:70,
 	    pillow:0,
 	    pillowPercent:20,
 	    reserve:0,
 	    reservePercent:10,
-        countGoals: (localStorage>0) ? localStorage.length : 1
+        /* / Проценты */
+
+	    /* Прямо сейчас */
+	    rightNow:"",
+	    pillowRightNow:"",
+	    reserveRightNow:"",
+        /* / Прямо сейчас */
+
+	    /* meta */
+        countGoals: (localStorage.length>0) ? localStorage.length : 1
     };
 
 
@@ -232,23 +247,38 @@
         data:jQuery.extend({}, defaults),// Это костыльно
         methods:{
             createGoal: function () {
-                this.countGoals += 1;
+                $("header nav a.active").removeClass("active");
+                this.countGoals++;
                 app.clear();
-                // todo new active tab
-	            // todo new localStorage[countGoals]
+                this.prior = this.countGoals;
             },
-            deleteGoal: function () {
-                delete localStorage[this.prior];
+            deleteGoal: function (key) {
+                // todo int to str
+                delete localStorage[key];
+                this.countGoals--;
             },
             loadGoal: function (key) {
-                var goal =  JSON.parse(localStorage.getItem(key));
-                // todo app.$data=goal;
-                app.cy=goal.cy;
-                app.name=goal.name;
-                app.date=goal.date;
-                app.dream=goal.dream;
-                app.InCom=goal.inCom;
-                app.expense=goal.expense;
+                if(localStorage.length>0){
+                    // Читаем из памяти
+                    var goal =  JSON.parse(localStorage[key]);
+                    // todo app.$data=goal;
+                    app.cy=goal.cy;
+                    app.name=goal.name;
+                    app.date=goal.date;
+                    app.dream=goal.dream;
+
+                    app.InCom=goal.inCom;
+                    app.expense=goal.expense;
+                    app.gain=gain;
+
+                    /* Проценты */
+                    app.broker=goal.broker;
+                    app.brokerPercent=goal.brokerPercent;
+                    app.pillow=goal.pillow;
+                    app.pillowPercent=goal.pillowPercent;
+                    app.reserve=goal.reserve;
+                    app.reservePercent=goal.reservePercent;
+                }
             }
         }
     });
@@ -259,21 +289,52 @@
         app.name=defaults.name;
         app.date=defaults.date;
         app.dream=defaults.dream;
+
         app.InCom=defaults.inCom;
         app.expense=defaults.expense;
+	    app.gain=defaults.gain;
+
+	    /* Проценты */
+        app.broker=defaults.broker;
+        app.brokerPercent=defaults.brokerPercent;
+        app.pillow=defaults.pillow;
+        app.pillowPercent=defaults.pillowPercent;
+        app.reserve=defaults.reserve;
+        app.reservePercent=defaults.reservePercent;
+
+	    /* Прямо сейчас */
+	    app.rightNow=defaults.rightNow;
+	    app.pillowRightNow=defaults.pillowRightNow;
+	    app.reserveRightNow=defaults.pillowRightNow;
     };
 
 
     var save = function () {
         // Создаем объект
         var goal = {
+            prior:app.prior,
             cy:app.cy,
             name:app.name,
             date:app.date,
             dream:app.dream,
+
+	        /* Базовые */
             inCom:app.inCom,
             expense:app.expense,
-	        prior:app.prior
+	        gain:app.gain,
+
+	        /* Проценты */
+	        broker:app.broker,
+	        brokerPercent:app.brokerPercent,
+	        pillow:app.pillow,
+            pillowPercent:app.pillowPercent,
+	        reserve:app.reserve,
+	        reservePercent:app.reservePercent,
+
+	        /* Прямо сейчас */
+	        rightNow:app.rightNow,
+	        pillowRightNow:app.pillowRightNow,
+	        reserveRightNow:app.reserveRightNow
         };
 
         // Серилизуем & Сохраняем
