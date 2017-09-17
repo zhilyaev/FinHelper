@@ -12,19 +12,23 @@
 <header class="container">
 	<div class="form-row">
 		<nav class="nav nav-tabs col-10">
-			<!-- TODO v-for without template but with function-attr -->
-			<tabs v-for="n in countGoals" :key="countGoals" v-bind:n="n"></tabs>
-			<a class="nav-item nav-link" href="#" v-on:click="createGoal()"><img src="svg/si-glyph-circle-plus.svg" width="16"> Новая цель</a>
+			<a class="nav-item nav-link active" href="#">
+				<span>#1</span>
+				<button type="button" class="close" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</a>
+			<a class="nav-item nav-link" id="creator" href="#" @click="creator()"><img src="svg/si-glyph-circle-plus.svg" width="16"> Новая цель</a>
 		</nav>
 		<div class="col-2">
 			<a class="btn-primary btn float-lg-right btn-block" href="#" onclick="localStorage.clear()">Таблица</a>
 		</div>
 	</div>
 </header>
-<section class="container" oninput="save()">
+<section class="container" oninput="save()" onchange="save()">
 	<div class="card">
 		<div class="card-header">
-			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{name}} #{{prior}} — <small>Процент вклада: <i id="result">0</i>%</small></h2>
+			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{goal.name}} #{{goal.prior}} — <small>Процент вклада: <i>{{resultPercent}}</i>%</small></h2>
 		</div>
 		<div class="card-body">
 			<fieldset>
@@ -32,9 +36,9 @@
 
 					<div class="col col-1">
 						<label for="prior" title="Приоритет цели">Приоритет</label>
-						<select class="form-control custom-select" id="prior" v-model="prior">
-							<!-- Max prior = count of goals /* Это настолько ахуенно что я кончил */ -->
-							<option v-for="n in countGoals" :key="countGoals">{{n}}</option>
+						<select class="form-control custom-select" id="prior" v-model="goal.prior">
+							<!-- Max prior = count of goals -->
+							<option v-for="n in count" :key="count">{{n}}</option>
 						</select>
 					</div>
 
@@ -42,13 +46,13 @@
 						<label for="name">Название</label>
 						<div class="input-group">
 							<span class="input-group-addon"><img src="svg/si-glyph-square-star.svg" width="16"></span>
-							<input class="form-control" value="Цель " id="name" v-model="name" placeholder="На Яхту">
+							<input class="form-control" value="Цель " id="name" v-model="goal.name" placeholder="На Яхту">
 						</div>
 					</div>
 
 					<div class="col col-1">
 						<label for="cy">Валюта</label>
-						<select class="form-control custom-select" id="cy" v-model="cy">
+						<select class="form-control custom-select" id="cy" v-model="goal.cy">
 							<option>₽</option>
 							<option>$</option>
 							<option>€</option>
@@ -58,8 +62,8 @@
 					<div class="col">
 						<label for="dream" title="Необходимая сумма для достижения цели">Конечная сумма</label>
 						<div class="input-group">
-							<span class="input-group-addon">{{cy}}</span>
-							<input class="form-control" min="0" type="number" v-model.number="dream" id="dream">
+							<span class="input-group-addon">{{goal.cy}}</span>
+							<input class="form-control" min="0" type="number" v-model.number="goal.dream" id="dream">
 						</div>
 					</div>
 
@@ -67,7 +71,7 @@
 						<label for="date" title="Срок достижения цели">Срок до</label>
 						<div class="input-group">
 							<label class="input-group-addon"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-							<input class="form-control" value="2018-05-06" type="date" v-model="date" id="date">
+							<input class="form-control" value="2018-05-06" type="date" v-model="goal.date" id="date">
 						</div>
 					</div>
 				</div>
@@ -81,23 +85,23 @@
 						<div class="col">
 							<label for="inCom">Доход/месяц</label>
 							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="inCom" id="inCom">
+								<span class="input-group-addon">{{goal.cy}}</span>
+								<input class="form-control" min="0" type="number" v-model.number="goal.inCom" id="inCom">
 							</div>
 						</div>
 
 						<div class="col">
 							<label for="expense">Расход/месяц</label>
 							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="expense" id="expense">
+								<span class="input-group-addon">{{goal.cy}}</span>
+								<input class="form-control" min="0" type="number" v-model.number="goal.expense" id="expense">
 							</div>
 						</div>
 
 						<div class="col">
 							<label title="Ежемесячные сбережения">Выручка:</label>
 							<div class="input-group">
-								= <b>&nbsp;{{cy}} {{gain=inCom-expense}} </b>
+								= <b>&nbsp;{{goal.cy}} {{goal.gain = goal.inCom - goal.expense}} </b>
 							</div>
 						</div>
 					</div>
@@ -108,8 +112,8 @@
 							<label for="brokerPercent" title="Какой процент ежемесячных сбережений вы будете отправлять на брокерский счет">На Брокерский счет</label>
 							<div class="input-group">
 								<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
-								<input class="form-control" v-model="brokerPercent" min="0" max="100" maxlength="3" type="number" id="brokerPercent">
-								<span class="input-group-addon" id="broker">{{broker=gain*brokerPercent/100}}</span>
+								<input class="form-control" v-model="goal.brokerPercent" min="0" max="100" oninput="if(this.value>100) this.value=100;" type="number" id="brokerPercent">
+								<span class="input-group-addon" id="broker">{{goal.broker = goal.gain * goal.brokerPercent/100}}</span>
 							</div>
 						</div>
 
@@ -117,8 +121,8 @@
 							<label for="pillowPercent" title="в финансовую подушку">Подушка</label>
 							<div class="input-group">
 								<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-								<input class="form-control" min="0" max="100" maxlength="3" type="number" v-model="pillowPercent"  id="pillowPercent">
-								<span class="input-group-addon" id="pillow">{{pillow=gain*pillowPercent/100}}</span>
+								<input class="form-control" min="0" max="100" type="number" v-model="goal.pillowPercent" oninput="if(this.value>100) this.value=100;"  id="pillowPercent">
+								<span class="input-group-addon" id="pillow">{{goal.pillow = goal.gain * goal.pillowPercent/100}}</span>
 							</div>
 						</div>
 
@@ -126,8 +130,8 @@
 							<label for="reservePercent" title="в резервный фонд">Резерв</label>
 							<div class="input-group">
 								<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-								<input class="form-control" min="0" max="100" maxlength="3" type="number" v-model="reservePercent"  id="reservePercent">
-								<span class="input-group-addon" id="reserve">{{reserve=gain*reservePercent/100}}</span>
+								<input class="form-control" min="0" max="100" type="number" v-model="goal.reservePercent" oninput="if(this.value>100) this.value=100;"  id="reservePercent">
+								<span class="input-group-addon" id="reserve">{{goal.reserve = goal.gain * goal.reservePercent/100}}</span>
 							</div>
 						</div>
 					</div>
@@ -135,26 +139,26 @@
 					<!-- ROW 3 RightNow -->
 					<div class="form-row">
 						<div class="col">
-							<label for="rightNowPercent" title="Сколько денег вы готовы прямо сейчас инвестировать на брокерский счет?">Сколько денег прямо сейчас?</label>
+							<label for="rightNow" title="Сколько денег вы готовы прямо сейчас инвестировать на брокерский счет?">Сколько денег прямо сейчас?</label>
 							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number"  id="rightNowPercent">
+								<span class="input-group-addon">{{goal.cy}}</span>
+								<input class="form-control" min="0" type="number" v-model.number="goal.rightNow"  id="rightNow">
 							</div>
 						</div>
 
 						<div class="col">
 							<label for="pillowRightNow" title="в финансовую подушку прямо сейчас">Подушка</label>
 							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number"  id="pillowRightNow">
+								<span class="input-group-addon">{{goal.cy}}</span>
+								<input class="form-control" min="0" type="number" v-model.number="goal.pillowRightNow"  id="pillowRightNow">
 							</div>
 						</div>
 
 						<div class="col">
 							<label for="reserveRightNow" title="в резервный фонд прямо сейчас">Резерв</label>
 							<div class="input-group">
-								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number"  id="reserveRightNow">
+								<span class="input-group-addon">{{goal.cy}}</span>
+								<input class="form-control" min="0" type="number" v-model.number="goal.reserveRightNow"  id="reserveRightNow">
 							</div>
 						</div>
 					</div>
@@ -186,166 +190,15 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/tooltip.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/vue.js"></script>
-<script src="js/date.js"></script>
-<script src="js/calculateDoc.js"></script>
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- Шаблоны -->
-<script type="x-template" id="tmpl-tab">
-	<a class="nav-item nav-link active"  href="#">
-		<span v-on:click="loadGoal()">{{name}} #{{n}}</span>
-		<button type="button"  v-on:click="deleteGoal()" class="close" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</a>
-</script>
-<script>
-    // Дефолтные настройки
-    const defaults = {
-        prior:1,
-        cy:'₽',
-        name:'Цель',
-        // (Today + 1 year).parse("YYYY-mm-dd")
-        date:new Date(new Date().setFullYear(new Date().getFullYear()+1)).yyyymmdd("-"),
-        dream:"",
-
-        /* Базовые */
-        inCom:"",
-        expense:"",
-        gain:0,
-        /* / Базовые*/
-
-        /* Проценты */
-	    broker:0,
-	    brokerPercent:70,
-	    pillow:0,
-	    pillowPercent:20,
-	    reserve:0,
-	    reservePercent:10,
-        /* / Проценты */
-
-	    /* Прямо сейчас */
-	    rightNow:"",
-	    pillowRightNow:"",
-	    reserveRightNow:"",
-        /* / Прямо сейчас */
-
-	    /* meta */
-        countGoals: (localStorage.length>0) ? localStorage.length : 1
-    };
-
-
-    // MVC
-    Vue.component('tabs', {
-        template: '#tmpl-tab',
-        props:['n','name']
-    });
-    var app = new Vue({
-        el:"#app",
-	    // copy object
-        data:jQuery.extend({}, defaults),// Это костыльно
-        methods:{
-            createGoal: function () {
-                $("header nav a.active").removeClass("active");
-                this.countGoals++;
-                app.clear();
-                this.prior = this.countGoals;
-            },
-            deleteGoal: function (key) {
-                // todo int to str
-                delete localStorage[key];
-                this.countGoals--;
-            },
-            loadGoal: function (key) {
-                if(localStorage.length>0){
-                    // Читаем из памяти
-                    var goal =  JSON.parse(localStorage[key]);
-                    // todo app.$data=goal;
-                    app.cy=goal.cy;
-                    app.name=goal.name;
-                    app.date=goal.date;
-                    app.dream=goal.dream;
-
-                    app.InCom=goal.inCom;
-                    app.expense=goal.expense;
-                    app.gain=gain;
-
-                    /* Проценты */
-                    app.broker=goal.broker;
-                    app.brokerPercent=goal.brokerPercent;
-                    app.pillow=goal.pillow;
-                    app.pillowPercent=goal.pillowPercent;
-                    app.reserve=goal.reserve;
-                    app.reservePercent=goal.reservePercent;
-                }
-            }
-        }
-    });
-    //defaults as method
-    app.clear = function () {
-        // todo app.$data=goal;
-        app.cy=defaults.cy;
-        app.name=defaults.name;
-        app.date=defaults.date;
-        app.dream=defaults.dream;
-
-        app.InCom=defaults.inCom;
-        app.expense=defaults.expense;
-	    app.gain=defaults.gain;
-
-	    /* Проценты */
-        app.broker=defaults.broker;
-        app.brokerPercent=defaults.brokerPercent;
-        app.pillow=defaults.pillow;
-        app.pillowPercent=defaults.pillowPercent;
-        app.reserve=defaults.reserve;
-        app.reservePercent=defaults.reservePercent;
-
-	    /* Прямо сейчас */
-	    app.rightNow=defaults.rightNow;
-	    app.pillowRightNow=defaults.pillowRightNow;
-	    app.reserveRightNow=defaults.pillowRightNow;
-    };
-
-
-    var save = function () {
-        // Создаем объект
-        var goal = {
-            prior:app.prior,
-            cy:app.cy,
-            name:app.name,
-            date:app.date,
-            dream:app.dream,
-
-	        /* Базовые */
-            inCom:app.inCom,
-            expense:app.expense,
-	        gain:app.gain,
-
-	        /* Проценты */
-	        broker:app.broker,
-	        brokerPercent:app.brokerPercent,
-	        pillow:app.pillow,
-            pillowPercent:app.pillowPercent,
-	        reserve:app.reserve,
-	        reservePercent:app.reservePercent,
-
-	        /* Прямо сейчас */
-	        rightNow:app.rightNow,
-	        pillowRightNow:app.pillowRightNow,
-	        reserveRightNow:app.reserveRightNow
-        };
-
-        // Серилизуем & Сохраняем
-        localStorage[goal.prior]=JSON.stringify(goal);
-    };
-
-
+<script src="js/bootstrap.js">
     $(function () {
         // Делаем красивый title
         $('[title]').tooltip();
     })
 </script>
+<script src="js/vue.js"></script>
+<script src="js/date.js"></script>
+<script src="js/calc.js"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>
