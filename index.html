@@ -12,15 +12,16 @@
 <header class="container">
 	<div class="form-row">
 		<nav class="nav nav-tabs col-10">
+			<!-- TODO v-for without template but with function-attr -->
 			<tabs v-for="n in countGoals" :key="countGoals" v-bind:n="n"></tabs>
 			<a class="nav-item nav-link" href="#" v-on:click="createGoal()"><img src="svg/si-glyph-circle-plus.svg" width="16"> Новая цель</a>
 		</nav>
 		<div class="col-2">
-			<a class="btn-primary btn float-lg-right btn-block" href="#">Таблица</a>
+			<a class="btn-primary btn float-lg-right btn-block" href="#" onclick="localStorage.clear()">Таблица</a>
 		</div>
 	</div>
 </header>
-<section class="container">
+<section class="container" oninput="save()">
 	<div class="card">
 		<div class="card-header">
 			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{name}} #{{prior}} — <small>Процент вклада: <i id="result">0</i>%</small></h2>
@@ -227,35 +228,21 @@
     });
     var app = new Vue({
         el:"#app",
-        data:{
-            cy:defaults.cy,
-            name:defaults.name,
-            date:defaults.date,
-            dream:defaults.dream,
-            inCom:defaults.inCom,
-            expense:defaults.expense,
-            gain:defaults.gain,
-            prior:defaults.prior,
-            broker:defaults.broker,
-            brokerPercent:defaults.brokerPercent,
-            pillow:defaults.pillow,
-            pillowPercent:defaults.pillowPercent,
-            reserve:defaults.reserve,
-            reservePercent:defaults.reservePercent,
-            countGoals: defaults.countGoals
-        },
+	    // copy object
+        data:jQuery.extend({}, defaults),// Это костыльно
         methods:{
             createGoal: function () {
                 this.countGoals += 1;
-                // todo save?
                 app.clear();
+                // todo new active tab
+	            // todo new localStorage[countGoals]
             },
-            deleteGoal: function (key) {
-                //localStorage.removeItem(key);
-                //delete localStorage[key];
+            deleteGoal: function () {
+                delete localStorage[this.prior];
             },
             loadGoal: function (key) {
                 var goal =  JSON.parse(localStorage.getItem(key));
+                // todo app.$data=goal;
                 app.cy=goal.cy;
                 app.name=goal.name;
                 app.date=goal.date;
@@ -267,6 +254,7 @@
     });
     //defaults as method
     app.clear = function () {
+        // todo app.$data=goal;
         app.cy=defaults.cy;
         app.name=defaults.name;
         app.date=defaults.date;
@@ -284,19 +272,13 @@
             date:app.date,
             dream:app.dream,
             inCom:app.inCom,
-            expense:app.expense
+            expense:app.expense,
+	        prior:app.prior
         };
 
-        // Серилизуем
-        var serial = JSON.stringify(goal);
-        // Сохраняем
-        localStorage.setItem(goal.name,serial);
+        // Серилизуем & Сохраняем
+        localStorage[goal.prior]=JSON.stringify(goal);
     };
-
-    var update = function () {
-
-    };
-
 
 
     $(function () {
