@@ -36,7 +36,7 @@ const defaults = {
 var app = new Vue({
     el:"#app",
     // copy obj
-    data:$.extend({}, defaults),
+    data:JSON.parse(JSON.stringify(defaults)),
     computed:{
         resultPercent:function () {
             var aimTime = Date.diff(new Date(),new Date(this.goal.date))[1];
@@ -56,8 +56,8 @@ var app = new Vue({
                 "\t\t\t\t</button>\n" +
                 "\t\t\t</a>";
             $("header nav a:last").before(html);
-            // TODO Clear
-            app.goal=$.extend({}, defaults.goal);
+            // TODO Clear copy/assign
+            this.goal=JSON.parse(JSON.stringify(defaults.goal));
             this.goal.prior = this.count;
         },
         deleter: function (key) {
@@ -68,7 +68,7 @@ var app = new Vue({
         loader: function (key) {
             if(localStorage.length>0){
                 // Читаем из памяти
-                app.goal=JSON.parse(localStorage[key]);
+                this.goal=JSON.parse(localStorage[key]);
             }
         }
     }
