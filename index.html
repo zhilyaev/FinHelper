@@ -107,8 +107,8 @@
 							<label for="brokerPercent" title="Какой процент ежемесячных сбережений вы будете отправлять на брокерский счет">На Брокерский счет</label>
 							<div class="input-group">
 								<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
-								<input class="form-control" min="0" max="100" maxlength="3" type="number" id="brokerPercent">
-								<span class="input-group-addon" id="broker">0</span>
+								<input class="form-control" v-model="brokerPercent" min="0" max="100" maxlength="3" type="number" id="brokerPercent">
+								<span class="input-group-addon" id="broker">{{broker=gain*brokerPercent/100}}</span>
 							</div>
 						</div>
 
@@ -116,8 +116,8 @@
 							<label for="pillowPercent" title="в финансовую подушку">Подушка</label>
 							<div class="input-group">
 								<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-								<input class="form-control" min="0" max="100" maxlength="3" type="number"  id="pillowPercent">
-								<span class="input-group-addon" id="pillow">0</span>
+								<input class="form-control" min="0" max="100" maxlength="3" type="number" v-model="pillowPercent"  id="pillowPercent">
+								<span class="input-group-addon" id="pillow">{{pillow=gain*pillowPercent/100}}</span>
 							</div>
 						</div>
 
@@ -125,8 +125,8 @@
 							<label for="reservePercent" title="в резервный фонд">Резерв</label>
 							<div class="input-group">
 								<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-								<input class="form-control" min="0" max="100" maxlength="3" type="number"  id="reservePercent">
-								<span class="input-group-addon" id="reserve">0</span>
+								<input class="form-control" min="0" max="100" maxlength="3" type="number" v-model="reservePercent"  id="reservePercent">
+								<span class="input-group-addon" id="reserve">{{reserve=gain*reservePercent/100}}</span>
 							</div>
 						</div>
 					</div>
@@ -138,25 +138,22 @@
 							<div class="input-group">
 								<span class="input-group-addon">{{cy}}</span>
 								<input class="form-control" min="0" type="number"  id="rightNowPercent">
-								<span class="input-group-addon" id="rightNow">0</span>
 							</div>
 						</div>
 
 						<div class="col">
-							<label for="pillowPercentRightNow" title="в финансовую подушку прямо сейчас">Подушка</label>
+							<label for="pillowRightNow" title="в финансовую подушку прямо сейчас">Подушка</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number"  id="pillowPercentRightNow">
-								<span class="input-group-addon" id="pillowRightNow">0</span>
+								<input class="form-control" min="0" type="number"  id="pillowRightNow">
 							</div>
 						</div>
 
 						<div class="col">
-							<label for="reservePercentRightNow" title="в резервный фонд прямо сейчас">Резерв</label>
+							<label for="reserveRightNow" title="в резервный фонд прямо сейчас">Резерв</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{cy}}</span>
-								<input class="form-control" min="0" type="number"  id="reservePercentRightNow">
-								<span class="input-group-addon" id="reserveRightNow">0</span>
+								<input class="form-control" min="0" type="number"  id="reserveRightNow">
 							</div>
 						</div>
 					</div>
@@ -195,7 +192,7 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Шаблоны -->
 <script type="x-template" id="tmpl-tab">
-	<a class="nav-item nav-link active" v-on:click="loadGoal()"  href="#">Цель {{n}}
+	<a class="nav-item nav-link active" v-on:click="loadGoal()"  href="#">Цель #{{n}}
 		<button type="button"  v-on:click="deleteGoal()" class="close" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -208,11 +205,17 @@
         name:'Цель',
         // (Today + 1 year).parse("YYYY-mm-dd")
         date:new Date(new Date().setFullYear(new Date().getFullYear()+1)).yyyymmdd("-"),
-        dream:0,
-        inCom:0,
-        expense:0,
+        dream:"",
+        inCom:"",
+        expense:"",
         gain:0,
 	    prior:1,
+	    broker:0,
+	    brokerPercent:70,
+	    pillow:0,
+	    pillowPercent:20,
+	    reserve:0,
+	    reservePercent:10,
         countGoals: (localStorage>0) ? localStorage.length : 1
     };
 
@@ -233,7 +236,13 @@
             expense:defaults.expense,
             gain:defaults.gain,
             prior:defaults.prior,
-            countGoals: (localStorage>0) ? localStorage.length : 1
+            broker:defaults.broker,
+            brokerPercent:defaults.brokerPercent,
+            pillow:defaults.pillow,
+            pillowPercent:defaults.pillowPercent,
+            reserve:defaults.reserve,
+            reservePercent:defaults.reservePercent,
+            countGoals: defaults.countGoals
         },
         methods:{
             createGoal: function () {
@@ -282,6 +291,10 @@
         var serial = JSON.stringify(goal);
         // Сохраняем
         localStorage.setItem(goal.name,serial);
+    };
+
+    var update = function () {
+
     };
 
 
