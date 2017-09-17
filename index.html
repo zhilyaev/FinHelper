@@ -191,6 +191,15 @@
 <script src="js/date.js"></script>
 <script src="js/calculateDoc.js"></script>
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Шаблоны -->
+<script type="x-template" id="tmpl-tab">
+	<a class="nav-item nav-link active"  href="#">
+		<span v-on:click="loadGoal()">{{name}} #{{n}}</span>
+		<button type="button"  v-on:click="deleteGoal()" class="close" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</a>
+</script>
 <script>
     // Дефолтные настройки
     const defaults = {
@@ -226,6 +235,12 @@
         countGoals: (localStorage.length>0) ? localStorage.length : 1
     };
 
+
+    // MVC
+    Vue.component('tabs', {
+        template: '#tmpl-tab',
+        props:['n','name']
+    });
     var app = new Vue({
         el:"#app",
 	    // copy object
