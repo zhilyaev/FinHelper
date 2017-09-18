@@ -13,9 +13,7 @@
 <header class="container">
 	<div class="form-row">
 		<nav class="nav nav-tabs col-10">
-			<a class="nav-item nav-link" v-for="n in goals" v-bind:n="JSON.parse(n)" href="#">
-				<!-- Таких костылей ты еще не видел -->
-				<span style="display: none">{{n=JSON.parse(n)}}</span>
+			<a class="nav-item nav-link" v-for="n in goals.asArrayOfObj()" :class="{'active':n.prior==current.prior}"  href="#">
 				<b>{{n.name}}</b> #<i>{{n.prior}}</i>
 				<button type="button" class="close" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -24,7 +22,7 @@
 			<a class="nav-item nav-link" id="creator" href="#" @click="creator()"><img src="svg/si-glyph-circle-plus.svg" width="16"> Новая цель</a>
 		</nav>
 		<div class="col-2">
-			<a class="btn-primary btn float-lg-right btn-block" href="#" onclick="localStorage.clear()">Очистить localStorage</a>
+			<a class="btn-primary btn float-lg-right btn-block" href="#" onclick="app.goals.clear()">Очистить localStorage</a>
 		</div>
 	</div>
 </header>

@@ -26,11 +26,24 @@ const defaults ={
     reserveRightNow:""
 
 };
-localStorage[1] = JSON.stringify(defaults);
+/* Str[] to goal[] */
+Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
+    var res = [];
+    for (var i=0;i<localStorage.length;i++){
+        try {
+            res.push(JSON.parse(localStorage[i]));
+        }catch (e){
+            console.log(e);
+        }
+    }
+
+    return res;
+};
+localStorage[0] = JSON.stringify(defaults);
 var app = new Vue({
     el:"#app",
     data:{
-        current:JSON.parse(localStorage[1]),
+        current:JSON.parse(localStorage[0]),
         goals: localStorage
     },
     computed:{
@@ -48,7 +61,7 @@ var app = new Vue({
         creator: function () {
             this.current = JSON.parse(JSON.stringify(defaults));
             this.current.prior=this.goals.length+1;
-            this.goals.setItem(this.current.prior,JSON.stringify(this.current));
+            this.goals.setItem(this.goals.length,JSON.stringify(this.current));
         }
     }
 });
