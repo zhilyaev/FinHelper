@@ -33,7 +33,7 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
         try {
             res.push(JSON.parse(localStorage[i]));
         }catch (e){
-            console.log(e);
+            console.log("Error index in localStorage");
         }
     }
 
@@ -69,6 +69,9 @@ var app = new Vue({
         },
         deleter:function (key) {
             delete this.goals[key];
+        },
+        setActive:function (key) {
+            this.current = JSON.parse(this.goals[key-1]);
         }
     }
 });
