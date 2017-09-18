@@ -13,8 +13,10 @@
 <header class="container">
 	<div class="form-row">
 		<nav class="nav nav-tabs col-10">
-			<a class="nav-item nav-link active" v-for="goal in goals" href="#">
-				<b>{{goal.name}}</b> #<i>{{goal.prior}}</i>
+			<a class="nav-item nav-link" v-for="n in goals" v-bind:n="JSON.parse(n)" href="#">
+				<!-- Таких костылей ты еще не видел -->
+				<span style="display: none">{{n=JSON.parse(n)}}</span>
+				<b>{{n.name}}</b> #<i>{{n.prior}}</i>
 				<button type="button" class="close" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -39,7 +41,7 @@
 						<label for="prior" title="Приоритет цели">Приоритет</label>
 						<select class="form-control custom-select" id="prior" v-model="current.prior">
 							<!-- Max prior = count of goals -->
-							<option>1</option>
+							<option v-for="n in goals.length" :key="goals.length">{{n}}</option>
 						</select>
 					</div>
 

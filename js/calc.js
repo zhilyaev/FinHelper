@@ -26,25 +26,29 @@ const defaults ={
     reserveRightNow:""
 
 };
-
-localStorage['0']=JSON.stringify(defaults);
-
+localStorage[1] = JSON.stringify(defaults);
 var app = new Vue({
     el:"#app",
     data:{
-        current:JSON.parse(localStorage['0']),
+        current:JSON.parse(localStorage[1]),
         goals: localStorage
     },
     computed:{
         resultPercent:function () {
             return 0;
+        },
+        isActive:function (index) {
+            return index===this.current.prior;
         }
+    },
+    watch: {
+
     },
     methods: {
         creator: function () {
             this.current = JSON.parse(JSON.stringify(defaults));
-            this.goals.setItem(this.goals.length.toString(),this.current);
+            this.current.prior=this.goals.length+1;
+            this.goals.setItem(this.current.prior,JSON.stringify(this.current));
         }
     }
 });
-
