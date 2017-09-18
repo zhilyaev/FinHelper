@@ -39,7 +39,8 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
 
     return res;
 };
-localStorage[0] = JSON.stringify(defaults);
+// Первый раз запустили приложуху
+if(localStorage.length===0) localStorage[0] = JSON.stringify(defaults);
 var app = new Vue({
     el:"#app",
     data:{
@@ -49,19 +50,25 @@ var app = new Vue({
     computed:{
         resultPercent:function () {
             return 0;
-        },
-        isActive:function (index) {
-            return index===this.current.prior;
         }
     },
     watch: {
-
+        current:{
+            handler:function (newVal) {
+                this.goals[this.current.prior-1]=JSON.stringify(this.current);
+                console.log("save=>"+JSON.stringify(this.current));
+            },
+            deep:true
+        }
     },
     methods: {
         creator: function () {
             this.current = JSON.parse(JSON.stringify(defaults));
             this.current.prior=this.goals.length+1;
-            this.goals.setItem(this.goals.length,JSON.stringify(this.current));
+            this.goals[this.goals.length] = JSON.stringify(this.current);
+        },
+        deleter:function (key) {
+            delete this.goals[key];
         }
     }
 });
