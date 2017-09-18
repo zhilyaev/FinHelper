@@ -10,5 +10,6 @@
     <orderEntry type="library" name="vue" level="application" />
     <orderEntry type="library" name="tooltip" level="application" />
     <orderEntry type="library" name="buttons" level="application" />
+    <orderEntry type="library" name="vue-ls" level="application" />
   </component>
 </module>
