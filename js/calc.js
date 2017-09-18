@@ -40,23 +40,27 @@ var app = new Vue({
     computed:{
         resultPercent:function () {
             var aimTime = Date.diff(new Date(),new Date(this.goal.date))[1];
-            //  TODO @Vonvee algoritm
+            //  TODO @Vonvee процент вклада
             // return percent [0,100]
             return 0;
         }
+        // todo может стоит превратить все вычислямыые поля в computed???
     },
     methods:{
         creator: function () {
             $("header nav a.active").removeClass("active");
             this.count++;
-            var html ="<a class=\"nav-item nav-link active\" href=\"#\">\n" +
-                "\t\t\t\t<span>#"+this.count+"</span>\n" +
-                "\t\t\t\t<button type=\"button\" class=\"close\" aria-label=\"Close\">\n" +
-                "\t\t\t\t\t<span aria-hidden=\"true\">&times;</span>\n" +
-                "\t\t\t\t</button>\n" +
-                "\t\t\t</a>";
+            // todo add deleter to html
+            // todo add loader to html
+            var html ="<a class=\"nav-item nav-link active\" href=\"#\">" +
+                "<b>"+defaults.goal.name+"</b>" +
+                "#<i>"+this.count+"</i>" +
+                "<button type=\"button\" class=\"close\" aria-label=\"Close\">" +
+                "<span aria-hidden=\"true\">&times;</span>" +
+                "</button>" +
+                "</a>";
             $("header nav a:last").before(html);
-            // TODO Clear copy/assign
+            // copy obj
             this.goal=JSON.parse(JSON.stringify(defaults.goal));
             this.goal.prior = this.count;
         },
@@ -69,6 +73,7 @@ var app = new Vue({
             if(localStorage.length>0){
                 // Читаем из памяти
                 this.goal=JSON.parse(localStorage[key]);
+                //todo click(this).set(active)
             }
         }
     }
@@ -78,4 +83,8 @@ var save = function () {
     // Серилизуем & Сохраняем
     localStorage[app.goal.prior]=JSON.stringify(app.goal);
     console.log("save =>"+localStorage[app.goal.prior]);
+    /* todo change current item
+    $("header nav a.active b").text(app.goal.name);
+    $("header nav a.active i").text(app.goal.prior); */
 };
+
