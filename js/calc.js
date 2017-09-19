@@ -41,7 +41,8 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
 };
 /* Remove like ListArray */
 Object.getPrototypeOf(localStorage).safeRemove = function (index) {
-    // Вспомним Алгоритмы
+    // todo vonvee сделай ебучий алгоритм
+    // see https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
 
 };
 // Первый раз запустили приложуху
@@ -91,16 +92,7 @@ var app = new Vue({
                 }
                 // Удаление со сдвигом // todo @Vonvee
                 else {
-                    var i=key-1;
-                    for(i;i<this.goals.length;i++){
-                        delete this.goals[i];
-                        // get next
-                        var next = JSON.parse(this.goals[i+1]);
-                        next.prior = i+1;
-                        //console.log("Сложное удаление ["+i+"] "+JSON.stringify(next));
-                        this.goals[i] = JSON.stringify(next);
-                    }
-                    delete this.goals[1];
+                    this.goals.safeRemove(key-1);
                 }
             }
             else this.current = JSON.parse(this.goals[key-1]);
