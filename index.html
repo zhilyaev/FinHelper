@@ -13,23 +13,23 @@
 <header class="container">
 	<div class="form-row">
 		<nav class="nav nav-tabs col-10">
-			<a class="nav-item nav-link" v-for="n in goals.asArrayOfObj()" @click="setActive(n.prior)" :class="{'active':n.prior==current.prior}"  href="#">
-				<b>{{n.name}}</b> #<i>{{n.prior}}</i>
-				<button type="button" class="close" @click="deleter()" aria-label="Close">
+			<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#">
+				<b>{{n.name}}</b> #<i>{{index+1}}</i>
+				<button v-if="goals.length!=1" type="button" class="close" @click="deleter()" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</a>
 			<a class="nav-item nav-link" id="creator" href="#" @click="creator()"><img src="svg/si-glyph-circle-plus.svg" width="16"> Новая цель</a>
 		</nav>
 		<div class="col-2">
-			<a class="btn-primary btn float-lg-right btn-block" href="#" onclick="app.goals.clear()">Очистить localStorage</a>
+			<a class="btn-primary btn float-lg-right btn-block" href="#">Таблица</a>
 		</div>
 	</div>
 </header>
 <section class="container">
 	<div class="card">
 		<div class="card-header">
-			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{current.name}} #{{current.prior}} — <small>Процент вклада: <i>{{resultPercent}}</i>%</small></h2>
+			<h2><img src="svg/si-glyph-square-star.svg" width="48">&nbsp;{{current.name}} #{{i+1}} — <small>Процент вклада: <i>{{resultPercent}}</i>%</small></h2>
 		</div>
 		<div class="card-body">
 			<fieldset>
@@ -37,7 +37,7 @@
 
 					<div class="col col-1">
 						<label for="prior" title="Приоритет цели">Приоритет</label>
-						<select class="form-control custom-select" id="prior" v-model="current.prior">
+						<select class="form-control custom-select" id="prior">
 							<!-- Max prior = count of goals -->
 							<option v-for="n in goals.length" :key="goals.length">{{n}}</option>
 						</select>

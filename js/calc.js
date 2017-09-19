@@ -1,6 +1,5 @@
 // Дефолтные настройки
 const defaults ={
-    prior:1,
     cy:'₽',
     name:'Цель',
     // (Today + 1 year).parse("YYYY-mm-dd")
@@ -41,9 +40,10 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
 };
 /* Remove like ListArray */
 Object.getPrototypeOf(localStorage).safeRemove = function (index) {
-    // todo vonvee сделай ебучий алгоритм
-    // see https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
-
+    for(var i = index; i < localStorage.length; i++){
+        localStorage[i] = localStorage[i+1]
+    }
+    delete localStorage[localStorage.length-1];
 };
 // Первый раз запустили приложуху
 if(localStorage.length===0) localStorage[0] = JSON.stringify(defaults);
@@ -52,18 +52,38 @@ var app = new Vue({
     el:"#app",
     data:{
         current:JSON.parse(localStorage[0]),
-        goals: localStorage
+        // Really shit
+        goals: localStorage,
+        // current index
+        i: 0
     },
     computed:{
         resultPercent:function () {
-            return 0;
+            // Разница месяцев
+            var aimTime = Date.diff(new Date(), new Date(this.current.date))[1];
+
+            var period = 12;
+            var moneyWithoutPercents = this.current.rightNow + this.current.gain * aimTime;
+            var numberOfFullPeriods = aimTime / period;
+            var profit = (this.current.dream - moneyWithoutPercents) / numberOfFullPeriods;
+            var result = ((parseInt(profit) + parseInt(moneyWithoutPercents)) / moneyWithoutPercents - 1) * 100;
+
+            if (result < 0) {
+                result = "Цель выполнится накоплением без вкладов."
+            } else if (result > 50) {
+                result = "Выполнение цели недостижимо в данные сроки."
+            }
+
+            // Fix
+            if(isNaN(result)){result=0}
+            return result;
         }
     },
     watch: {
         current:{
-            handler:function (newVal) {
-                this.goals[this.current.prior-1]=JSON.stringify(this.current);
-                console.log("save=>"+JSON.stringify(this.current));
+            handler:function () {
+                this.goals[this.i]=JSON.stringify(this.current);
+                //console.log("save["+this.i+"] : "+JSON.stringify(this.current));
             },
             deep:true
         }
@@ -71,31 +91,24 @@ var app = new Vue({
     methods: {
         creator: function () {
             this.current = JSON.parse(JSON.stringify(defaults));
-            this.current.prior=this.goals.length+1;
             this.goals[this.goals.length] = JSON.stringify(this.current);
+            this.i = this.goals.length-1;
         },
         deleter:function () {
-            if(this.goals.length===1){
-                alert("Нельзя удалить все цели");
-            }else canDel=true;
+            canDel=true;
         },
         setActive:function (key) {
-            /* Костыльный велоспиед отлова вложенного события */
+            // Было нажато удаление
             if(canDel){
                 canDel = false;
-                // Переключатся на ближайший слева
-                this.current = JSON.parse(this.goals[key-2]);
-                // Удалить последний элемент очень просто!
-                if(key===this.goals.length){
-                    //console.log("Простое удаление");
-                    delete this.goals[key-1];
-                }
-                // Удаление со сдвигом // todo @Vonvee
-                else {
-                    this.goals.safeRemove(key-1);
-                }
+                this.goals.safeRemove(key);
+                // Смещаем
+                key = 0;
             }
-            else this.current = JSON.parse(this.goals[key-1]);
+
+                this.current = JSON.parse(this.goals[key]);
+                this.i = key;
+
         }
     }
 });
