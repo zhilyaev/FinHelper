@@ -15,7 +15,7 @@
 		<nav class="nav nav-tabs col-10">
 			<a class="nav-item nav-link" v-for="n in goals.asArrayOfObj()" @click="setActive(n.prior)" :class="{'active':n.prior==current.prior}"  href="#">
 				<b>{{n.name}}</b> #<i>{{n.prior}}</i>
-				<button type="button" class="close" @click="deleter(n.prior)" aria-label="Close">
+				<button type="button" class="close" @click="deleter()" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</a>

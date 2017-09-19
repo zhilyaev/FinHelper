@@ -39,8 +39,14 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
 
     return res;
 };
+/* Remove like ListArray */
+Object.getPrototypeOf(localStorage).safeRemove = function (index) {
+    // Вспомним Алгоритмы
+
+};
 // Первый раз запустили приложуху
 if(localStorage.length===0) localStorage[0] = JSON.stringify(defaults);
+var canDel = false;
 var app = new Vue({
     el:"#app",
     data:{
@@ -67,11 +73,37 @@ var app = new Vue({
             this.current.prior=this.goals.length+1;
             this.goals[this.goals.length] = JSON.stringify(this.current);
         },
-        deleter:function (key) {
-            delete this.goals[key];
+        deleter:function () {
+            if(this.goals.length===1){
+                alert("Нельзя удалить все цели");
+            }else canDel=true;
         },
         setActive:function (key) {
-            this.current = JSON.parse(this.goals[key-1]);
+            /* Костыльный велоспиед отлова вложенного события */
+            if(canDel){
+                canDel = false;
+                // Переключатся на ближайший слева
+                this.current = JSON.parse(this.goals[key-2]);
+                // Удалить последний элемент очень просто!
+                if(key===this.goals.length){
+                    //console.log("Простое удаление");
+                    delete this.goals[key-1];
+                }
+                // Удаление со сдвигом // todo @Vonvee
+                else {
+                    var i=key-1;
+                    for(i;i<this.goals.length;i++){
+                        delete this.goals[i];
+                        // get next
+                        var next = JSON.parse(this.goals[i+1]);
+                        next.prior = i+1;
+                        //console.log("Сложное удаление ["+i+"] "+JSON.stringify(next));
+                        this.goals[i] = JSON.stringify(next);
+                    }
+                    delete this.goals[1];
+                }
+            }
+            else this.current = JSON.parse(this.goals[key-1]);
         }
     }
 });
