@@ -39,7 +39,7 @@
 						<label for="prior" title="Приоритет цели">Приоритет</label>
 						<select class="form-control custom-select" id="prior">
 							<!-- Max prior = count of goals -->
-							<option v-for="n in goals.length" :key="goals.length">{{n}}</option>
+							<option v-for="n in goals.length" :selected="n==i+1">{{n}}</option>
 						</select>
 					</div>
 
