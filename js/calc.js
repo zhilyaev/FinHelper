@@ -112,3 +112,12 @@ var app = new Vue({
         }
     }
 });
+
+// Меняем местами
+$("#prior").change(function () {
+    var t = app.goals[this.value];
+    app.goals[this.value] = app.goals[app.i];
+    app.goals[app.i] = t;
+
+    app.i = this.value;
+});
