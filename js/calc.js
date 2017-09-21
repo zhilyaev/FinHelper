@@ -55,8 +55,8 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
     for(var i=0;i<aims.length;i++){
         // Structure of row
         const row = {
-            date: 0,
-            totalMoney:0,
+            date: (aims[i].date- new Date()),
+            totalMoney: aims[i].rightNow + aims[i].broker + aims[i].reserve, // see Example
             broker:0,
             pillow:0,
             reserve:0,
