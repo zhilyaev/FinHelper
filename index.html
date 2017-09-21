@@ -10,6 +10,7 @@
 <body>
 <br>
 <section id="app">
+<!-- MODAL -->
 	<div class="modal fade" id="modal">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
@@ -20,8 +21,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<p>Значиние тестов!!!</p>
-					<table>
+					<table id="tablePDF">
 						<thead>
 						<tr>
 							<th>Дата</th>
@@ -32,13 +32,13 @@
 							<th>Статус</th>
 						</tr>
 						</thead>
-						<tr v-for="(n, index) in goals.asArrayOfObj()">
+						<tr v-for="(n, index) in goals.calcTable()">
 							<td>{{n.date}}</td>
-							<td>{{n.dream}}</td>
-							<td>{{n.dream}}</td>
-							<td>{{n.dream}}</td>
-							<td>{{n.dream}}</td>
-							<td><img src="svg/si-glyph-checked.svg" width="48"></td>
+							<td>{{n.totalMoney}}</td>
+							<td>{{n.broker}}</td>
+							<td>{{n.pillow}}</td>
+							<td>{{n.reserve}}</td>
+							<td>{{n.checked}}</td>
 						</tr>
 					</table>
 				</div>
@@ -49,6 +49,7 @@
 			</div>
 		</div>
 	</div>
+<!-- / MODAL -->
 <header class="container">
 	<div class="form-row">
 		<nav class="nav nav-tabs col-10">
@@ -230,16 +231,17 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/tooltip.js"></script>
-<script src="js/bootstrap.min.js">
-    $(function () {
-        // Делаем красивый title
-        $('[title]').tooltip();
-    })
-</script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/jspdf.debug.js"></script>
 <script src="js/vue.js"></script>
 <script src="js/date.js"></script>
 <script src="js/calc.js"></script>
 <script src="js/pdf.js"></script>
+<script>
+    $(function () {
+        // Делаем красивый title
+        $('[title]').tooltip();
+    })
+</script>
 </body>
 </html>
