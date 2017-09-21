@@ -59,13 +59,16 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
             totalMoney:0,
             broker:0,
             pillow:0,
-            reserved:0
+            reserve:0,
+            checked: false
         };
 
         // TODO: @Vonvee your code here
-        // here
-
-
+        /* example
+        row.date = aims[i].date;
+        row.totalMoney = aims[i].rightNow + aims[i].broker + aims[i].reserve;
+        var percentsCorrelation = [ aims[i].brokerPercent, aims[i].brokerPercent, aims[i].pillowPercent ];
+        */
 
         table.push(row);
     }
