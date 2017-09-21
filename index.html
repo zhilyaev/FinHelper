@@ -54,11 +54,11 @@
 		<nav class="nav nav-tabs col-10">
 			<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#">
 				<b>{{n.name}}</b> #<i>{{index+1}}</i>
-				<button v-if="goals.length!=1" type="button" class="close" @click="deleter()" aria-label="Close">
+				<button v-if="goals.length!=1" type="button" class="close" @click="delTab()" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</a>
-			<a class="nav-item nav-link" id="creator" href="#" @click="creator()"><img src="svg/si-glyph-circle-plus.svg" width="16"> Новая цель</a>
+			<a class="nav-item nav-link" id="creator" href="#" @click="newTab()"><img src="svg/si-glyph-circle-plus.svg" width="16"> Новая цель</a>
 		</nav>
 		<div class="col-2">
 			<a href="#" class="btn-primary btn float-lg-right btn-block"  data-toggle="modal" data-target="#modal">Таблица</a>
