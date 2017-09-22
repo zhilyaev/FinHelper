@@ -8,8 +8,10 @@
 const defaults = {
     cy: '₽',
     name: 'Цель',
+    dateStart: new Date().yyyymmdd("-"),
     // (today + 1 year).parse("YYYY-mm-dd")
-    date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
+    dateFinish: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
+    diffMonths: 12,
 
     /* Base */
     dream: "", // totalMoney
@@ -97,28 +99,10 @@ var app = new Vue({
     },
     computed: {
         resultPercent: function () {
-            var aimTime = Date.diff(new Date(), new Date(this.current.date))[1];
-            var moneyWithoutPercents = this.current.rightNow + this.current.gain * aimTime;
-            var numberOfFullPeriods = (aimTime / 12).toFixed();
-            var profit = (this.current.dream - moneyWithoutPercents) / numberOfFullPeriods;
-            var result = ((profit.toFixed()+ moneyWithoutPercents) / moneyWithoutPercents - 1) * 100;
-
-            console.log(aimTime);
-            console.log(moneyWithoutPercents);
-            console.log(numberOfFullPeriods);
-            console.log(profit);
-            console.log(result);
-
-            if (result < 0) {
-                result = "Цель выполнится накоплением без вкладов."
-            } else if (result > 50) {
-                result = "Выполнение цели недостижимо в данные сроки."
-            }
-
-            // TODO @Vonvee bug with rightNow also pillowRightNow, reserveRightNow
-
-            // Fix
-            if (isNaN(result)) result = 0;
+            // dream = rightNow + broker * months
+            // x = (dream - rightNow) / broker * months
+            var result = (this.current.dream - this.current.rightNow) / (this.current.broker * this.current.diffMonths) * 100;
+            if(result<0) result = "Вы уже достигнули цели";
             return result;
         }
     },
