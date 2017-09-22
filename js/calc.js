@@ -57,7 +57,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
     for(var i=0;i<aims.length;i++){
         // Structure of row
         const row = {
-            date: (aims[i].date- new Date()),// see example
+            date: 0,
             totalMoney: aims[i].rightNow + aims[i].broker + aims[i].reserve, // see Example
             broker:0,
             pillow:0,
@@ -67,9 +67,9 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
 
         // TODO: @Vonvee your code here
         /* example
-        row.date = aims[i].date;
-        row.totalMoney = aims[i].rightNow + aims[i].broker + aims[i].reserve;
-        var percentsCorrelation = [ aims[i].brokerPercent, aims[i].brokerPercent, aims[i].pillowPercent ];
+        * row.date = aims[i].date;
+        * row.totalMoney = aims[i].rightNow + aims[i].broker + aims[i].reserve;
+        * var percentsCorrelation = [ aims[i].brokerPercent, aims[i].brokerPercent, aims[i].pillowPercent ];
         */
 
         table.push(row);
@@ -103,6 +103,8 @@ var app = new Vue({
             // x = (dream - rightNow) / broker * months
             var result = (this.current.dream - this.current.rightNow) / (this.current.broker * this.current.diffMonths) * 100;
             if(result<0) result = "Вы уже достигнули цели";
+            else if(isNaN(result)) result =0;
+
             return result;
         }
     },
