@@ -99,15 +99,23 @@ var app = new Vue({
         resultPercent: function () {
             var aimTime = Date.diff(new Date(), new Date(this.current.date))[1];
             var moneyWithoutPercents = this.current.rightNow + this.current.gain * aimTime;
-            var numberOfFullPeriods = aimTime / 12;
+            var numberOfFullPeriods = (aimTime / 12).toFixed();
             var profit = (this.current.dream - moneyWithoutPercents) / numberOfFullPeriods;
-            var result = ((profit+ moneyWithoutPercents) / moneyWithoutPercents - 1) * 100;
+            var result = ((profit.toFixed()+ moneyWithoutPercents) / moneyWithoutPercents - 1) * 100;
+
+            console.log(aimTime);
+            console.log(moneyWithoutPercents);
+            console.log(numberOfFullPeriods);
+            console.log(profit);
+            console.log(result);
 
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
             } else if (result > 50) {
                 result = "Выполнение цели недостижимо в данные сроки."
             }
+
+            // TODO @Vonvee bug with rightNow also pillowRightNow, reserveRightNow
 
             // Fix
             if (isNaN(result)) result = 0;
