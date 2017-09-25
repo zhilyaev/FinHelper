@@ -1,5 +1,5 @@
-# Fin Helper (see [Live](http://88.201.207.180:8080/FinHelper/))
-web application without backend works only by JavaScript
+# ![favicon](favicon/favicon-32x32.png) Fin Helper (see [Live](http://88.201.207.180:8080/FinHelper/))
+web application without backend, works only by JavaScript
 
 ### TODO
 1. clean code calc.js => ResultPercent()
