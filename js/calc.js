@@ -49,32 +49,100 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
 /* Calc table data */
 Object.getPrototypeOf(localStorage).calcTable = function () {
     // this === app.goals === localStorage
+    let remainder;
     // structure of aims[i]  = structure of defaults
     const aims = this.asArrayOfObj();
-    let table = [];
 
-    for(let i=0; i<aims.length; i++){
-        // Structure of row
-        const row = {
-            date: 0,
-            totalMoney: aims[i].rightNow + aims[i].broker + aims[i].reserve, // see Example
-            broker:0,
-            pillow:0,
-            reserve:0,
-            checked: false
-        };
+    // все что ниже мне максимально не нравится
 
-        // TODO: @Vonvee your code here
-        /* example
-        * row.date = aims[i].date;
-        * row.totalMoney = aims[i].rightNow + aims[i].broker + aims[i].reserve;
-        * var percentsCorrelation = [ aims[i].brokerPercent, aims[i].brokerPercent, aims[i].pillowPercent ];
-        */
+    let RecalculatePerc = function () {
+        // нету такой property
+        percentCorrelation.forEach(function (item, i, array) {
+            let sum = array.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+            array[i] = item / sum
+        });
+    };
 
-        table.push(row)
+    let AddRemainder = function (remainder, row) {
+        row.broker += remainder * percentCorrelation.brokerPerc;
+        row.pillow += remainder * percentCorrelation.pillowPerc;
+        row.reserved += remainder * percentCorrelation.reservedPerc;
+        //TODO: Please make it return null, and work directly with row data as link in C++ or ref in C#
+        return row
+    };
+    let totalMonths = 0;
+    for (let i = 0; i < aims.size; i++) {
+        totalMonths += aims.totalMonths;
     }
 
-    return table
+    let resultData = [];
+
+    for (i = 0; i < aims.length; i++) {
+        // Structure of row
+        const row = {
+            // see example
+            totalMoney: aims[i].rightNow + aims[i].broker + aims[i].reserve, // see Example
+            broker: aims[i].broker,
+            pillow: aims[i].pillow,
+            reserve: aims[i].reserve,
+            checked: false,
+            priority: aims[i].priority
+        };
+
+        const percentCorrelation = {
+            //Todo(ez): get from data fields
+            brokerPerc: aims[i].brokerPerc,
+            pillowPerc: aims[i].pillowPerc,
+            reservedPerc: aims[i].reservedPerc
+        };
+        let aimExtra = 0;
+        let pillowMax = aims[i].gain * 6;
+        let reservedMax = aims[i].gain * (1.5);
+        //Todo: get from data fields
+        resultData.push(row);
+        // нету такой property
+        for (let j = 1; j < aims[i].totalMonths; j++) {
+            let row = resultData[j - 1];
+            if (aimExtra !== 0) {
+                aims[i].gain += aimExtra;
+                aimExtra = 0
+            }
+            row.data.setMonth(row.data.getMonth() + 1);
+            row.broker += aims[i].gain * percentCorrelation.brokerPerc;
+            row.pillow += aims[i].gain * percentCorrelation.pillowPerc;
+            row.reserved += aims[i].gain * percentCorrelation.reservedPerc;
+
+
+            if (row.pillow > pillowMax) {
+                percentCorrelation.pillowPerc = 0;
+                RecalculatePerc();
+                remainder = row.pillow - pillowMax;
+                row.pillow = pillowMax;
+                row = AddRemainder(remainder, row)
+            }
+            if (row.reserved > reservedMax) {
+                percentCorrelation.reservedPerc = 0;
+                RecalculatePerc();
+                remainder = row.reserved - reservedMax;
+                row.reserved = reservedMax;
+                row = AddRemainder(remainder, row)
+            }
+
+            row.totalMoney += aims[i].gain;
+            if (row.totalMoney !== (row.broker + row.pillow + row.reserved)) {
+                throw Error("Бюджет не сошёлся!")
+            }
+
+            //Todo: make recalculate for different aims
+            if (aims[i].dream > row.totalMoney) {
+                aimExtra = aims[i].dream > row.totalMoney
+            }
+            resultData.push(row)
+        }
+    }
+    return resultData;
 };
 
 /* Remove like ListArray */
