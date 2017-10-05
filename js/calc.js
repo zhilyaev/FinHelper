@@ -74,7 +74,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
     };
     let totalMonths = 0;
     for (let i = 0; i < aims.size; i++) {
-        totalMonths += aims.totalMonths;
+        totalMonths += aims.diffMonths;
     }
 
     let resultData = [];
@@ -102,14 +102,13 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
         let reservedMax = aims[i].gain * (1.5);
         //Todo: get from data fields
         resultData.push(row);
-        // нету такой property
-        for (let j = 1; j < aims[i].totalMonths; j++) {
+        for (let j = 1; j < aims[i].diffMonths; j++) {
             let row = resultData[j - 1];
             if (aimExtra !== 0) {
                 aims[i].gain += aimExtra;
                 aimExtra = 0
             }
-            row.data.setMonth(row.data.getMonth() + 1);
+            row.data = new Data(row.data.getMonth() + 1);
             row.broker += aims[i].gain * percentCorrelation.brokerPerc;
             row.pillow += aims[i].gain * percentCorrelation.pillowPerc;
             row.reserved += aims[i].gain * percentCorrelation.reservedPerc;
