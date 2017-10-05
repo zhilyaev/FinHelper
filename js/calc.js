@@ -38,9 +38,9 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
     let res = [];
     for (let i = 0; i < this.length; i++) {
         try {
-            res.push(JSON.parse(this[i]));
+            res.push(JSON.parse(this[i]))
         } catch (e) {
-            console.log("Error index in localStorage");
+            console.log("Error index in localStorage")
         }
     }
 
@@ -82,7 +82,7 @@ Object.getPrototypeOf(localStorage).safeRemove = function (index) {
     for (let i = index; i < this.length; i++) {
         this[i] = this[i + 1]
     }
-    delete this[this.length - 1];
+    delete this[this.length - 1]
 };
 // Primary start
 if (localStorage.length === 0) localStorage[0] = JSON.stringify(defaults);
@@ -100,7 +100,6 @@ const app = new Vue({
         resultPercent: function () {
             let periodsInYear = 12;
             let result = Rate(this.current.diffMonths, (-1) * this.current.gain, (-1) * this.current.rightNow, this.current.dream, 0) * periodsInYear * 100;
-
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
             }
@@ -108,7 +107,7 @@ const app = new Vue({
                 result = "Выполнение цели недостижимо в данные сроки."
             }
             // Fix
-            if (isNaN(result)) result = 0;
+            if (isNaN(result) || this.current.gain===0) result = 0;
             return result
         }
     },
@@ -129,7 +128,7 @@ const app = new Vue({
         },
         delTab: function () {
             // Fix deep events
-            canDel = true;
+            canDel = true
         },
         setActive: function (key) {
             // has click delTab early
@@ -138,11 +137,11 @@ const app = new Vue({
                 // delTab:
                 this.goals.safeRemove(key);
                 // offset
-                key = 0;
+                key = 0
             }
             // SetActive :
             this.current = JSON.parse(this.goals[key]);
-            this.i = key;
+            this.i = key
 
         }
     }
