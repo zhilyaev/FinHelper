@@ -88,6 +88,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
             pillow: aims[i].pillow,
             reserve: aims[i].reserve,
             checked: false,
+            data: aims[i].dateStart,
             priority: aims[i].priority
         };
 
@@ -108,7 +109,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
                 aims[i].gain += aimExtra;
                 aimExtra = 0
             }
-            row.data = new Data(row.data.getMonth() + 1);
+            row.data.setMonth(row.data.getMonth() + 1);
             row.broker += aims[i].gain * percentCorrelation.brokerPerc;
             row.pillow += aims[i].gain * percentCorrelation.pillowPerc;
             row.reserved += aims[i].gain * percentCorrelation.reservedPerc;
