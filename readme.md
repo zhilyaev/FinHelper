@@ -2,8 +2,8 @@
 web application without backend, works only by JavaScript
 
 ### TODO
-1. clean code calc.js => ResultPercent()
-2. write calc.js => calcTable()
+ - [x] clean code calc.js => ResultPercent()
+ - [ ] write calc.js => calcTable()
 
 #### TODO: Optimization
 1. Render loading

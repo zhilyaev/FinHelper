@@ -8,8 +8,9 @@
 const defaults = {
     cy: '₽',
     name: 'Цель',
+    dateStart: new Date().yyyymmdd("-"),
     // (today + 1 year).parse("YYYY-mm-dd")
-    date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
+    dateFinish: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
 
     /* Base */
     dream: "", // totalMoney
@@ -171,7 +172,6 @@ var app = new Vue({
         resultPercent: function () {
             var periodsInYear = 12;
             var result = Rate(this.current.diffMonths, (-1) * this.current.gain, (-1) * this.current.rightNow, this.current.dream, 0) * periodsInYear * 100
-
 
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
