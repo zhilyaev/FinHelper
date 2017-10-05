@@ -131,7 +131,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
                 row = AddRemainder(remainder, row)
             }
 
-            row.totalMoney += aims[i].gain;
+            row.totalMoney += currGain;
             if (row.totalMoney !== (row.broker + row.pillow + row.reserved)) {
                 throw Error("Бюджет не сошёлся!")
             }
