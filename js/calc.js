@@ -104,15 +104,16 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
         //Todo: get from data fields
         resultData.push(row);
         for (let j = 1; j < aims[i].diffMonths; j++) {
+            let currGain = aims[i].gain;
             let row = resultData[j - 1];
             if (aimExtra !== 0) {
-                aims[i].gain += aimExtra;
+                currGain += aimExtra;
                 aimExtra = 0
             }
             row.data.setMonth(row.data.getMonth() + 1);
-            row.broker += aims[i].gain * percentCorrelation.brokerPerc;
-            row.pillow += aims[i].gain * percentCorrelation.pillowPerc;
-            row.reserved += aims[i].gain * percentCorrelation.reservedPerc;
+            row.broker += currGain * percentCorrelation.brokerPerc;
+            row.pillow += currGain * percentCorrelation.pillowPerc;
+            row.reserved += currGain * percentCorrelation.reservedPerc;
 
 
             if (row.pillow > pillowMax) {
