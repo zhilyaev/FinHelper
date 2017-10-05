@@ -1,8 +1,7 @@
 /*
-* ES 5.1
+* ES 6
 * camelCase
 * */
-
 
 // defaults structure for goal
 const defaults = {
@@ -11,12 +10,12 @@ const defaults = {
     dateStart: new Date().yyyymmdd("-"),
     // (today + 1 year).parse("YYYY-mm-dd")
     dateFinish: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
+    diffMonths: 12,
 
     /* Base */
     dream: "", // totalMoney
     inCom: "",
     expense: "",
-    diffMonths: 0,
     gain: 0,
     // TODO ? : result: resultPercent
 
@@ -36,8 +35,8 @@ const defaults = {
 };
 /* Str[] to goal[] */
 Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
-    var res = [];
-    for (var i = 0; i < this.length; i++) {
+    let res = [];
+    for (let i = 0; i < this.length; i++) {
         try {
             res.push(JSON.parse(this[i]));
         } catch (e) {
@@ -45,121 +44,50 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
         }
     }
 
-    return res;
+    return res
 };
 /* Calc table data */
 Object.getPrototypeOf(localStorage).calcTable = function () {
     // this === app.goals === localStorage
     // structure of aims[i]  = structure of defaults
-    var aims = this.asArrayOfObj();
+    const aims = this.asArrayOfObj();
+    let table = [];
 
-    RecalculatePerc = function () {
-        percentCorrelation.forEach(function (item, i, array) {
-            var sum = array.reduce(function (a, b) {
-                return a + b;
-            }, 0);
-            array[i] = item / sum
-        });
-    };
-
-    AddRemainder = function (remainder, row) {
-        row.broker += remainder * percentCorrelation.brokerPerc;
-        row.pillow += remainder * percentCorrelation.pillowPerc;
-        row.reserved += remainder * percentCorrelation.reservedPerc;
-        //TODO: Please make it return null, and work directly with row data as link in C++ or ref in C#
-        return row
-    };
-    var totalMonths = 0;
-    for (var i = 0; i < aims.size; i++) {
-        totalMonths += aims.totalMonths;
-    }
-
-    var resultData = [];
-
-    for (i = 0; i < aims.length; i++) {
+    for(let i=0; i<aims.length; i++){
         // Structure of row
-        var row = {
-            // see example
+        const row = {
+            date: 0,
             totalMoney: aims[i].rightNow + aims[i].broker + aims[i].reserve, // see Example
-            broker: aims[i].broker,
-            pillow: aims[i].pillow,
-            reserve: aims[i].reserve,
-            checked: false,
-            priority: aims[i].priority
+            broker:0,
+            pillow:0,
+            reserve:0,
+            checked: false
         };
-
 
         // TODO: @Vonvee your code here
         /* example
-        row.date = aims[i].date;
-        row.totalMoney = aims[i].rightNow + aims[i].broker + aims[i].reserve;
-        var percentsCorrelation = [ aims[i].brokerPercent, aims[i].brokerPercent, aims[i].pillowPercent ];
+        * row.date = aims[i].date;
+        * row.totalMoney = aims[i].rightNow + aims[i].broker + aims[i].reserve;
+        * var percentsCorrelation = [ aims[i].brokerPercent, aims[i].brokerPercent, aims[i].pillowPercent ];
         */
 
-        var percentCorrelation = {
-            //Todo(ez): get from data fields
-            brokerPerc: aims[i].brokerPerc,
-            pillowPerc: aims[i].pillowPerc,
-            reservedPerc: aims[i].reservedPerc
-        };
-        var aimExtra = 0;
-        var pillowMax = aims[i].gain * 6;
-        var reservedMax = aims[i].gain * (1.5);
-        //Todo: get from data fields
-        resultData.push(row);
-        for (var j = 1; j < aims[i].totalMonths; j++) {
-            var row = resultData[j - 1];
-            if (aimExtra != 0) {
-                aims[i].gain += aimExtra;
-                aimExtra = 0
-            }
-            row.data.setMonth(row.data.getMonth() + 1);
-            row.broker += aims[i].gain * percentCorrelation.brokerPerc;
-            row.pillow += aims[i].gain * percentCorrelation.pillowPerc;
-            row.reserved += aims[i].gain * percentCorrelation.reservedPerc;
-
-
-            if (row.pillow > pillowMax) {
-                percentCorrelation.pillowPerc = 0;
-                RecalculatePerc();
-                var remainder = row.pillow - pillowMax;
-                row.pillow = pillowMax;
-                row = AddRemainder(remainder, row)
-            }
-            if (row.reserved > reservedMax) {
-                percentCorrelation.reservedPerc = 0;
-                RecalculatePerc()
-                var remainder = row.reserved - reservedMax;
-                row.reserved = reservedMax;
-                row = AddRemainder(remainder, row)
-            }
-
-            row.totalMoney += aims[i].gain;
-            if (row.totalMoney !== (row.broker + row.pillow + row.reserved)) {
-                throw Error("Бюджет не сошёлся!")
-            }
-
-            //Todo: make recalculate for different aims
-            if (aim[i].dream > row.totalMoney) {
-                aimExtra = aim[i].dream > row.totalMoney
-            }
-            resultData.push(row)
-        }
+        table.push(row)
     }
-    return resultData;
-}
+
+    return table
+};
 
 /* Remove like ListArray */
 Object.getPrototypeOf(localStorage).safeRemove = function (index) {
-    for (var i = index; i < this.length; i++) {
+    for (let i = index; i < this.length; i++) {
         this[i] = this[i + 1]
     }
     delete this[this.length - 1];
 };
 // Primary start
 if (localStorage.length === 0) localStorage[0] = JSON.stringify(defaults);
-var canDel = false;
-var app = new Vue({
+let canDel = false;
+const app = new Vue({
     el: "#app",
     data: {
         current: JSON.parse(localStorage[0]),
@@ -170,8 +98,8 @@ var app = new Vue({
     },
     computed: {
         resultPercent: function () {
-            var periodsInYear = 12;
-            var result = Rate(this.current.diffMonths, (-1) * this.current.gain, (-1) * this.current.rightNow, this.current.dream, 0) * periodsInYear * 100
+            let periodsInYear = 12;
+            let result = Rate(this.current.diffMonths, (-1) * this.current.gain, (-1) * this.current.rightNow, this.current.dream, 0) * periodsInYear * 100;
 
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
@@ -181,7 +109,7 @@ var app = new Vue({
             }
             // Fix
             if (isNaN(result)) result = 0;
-            return result;
+            return result
         }
     },
     watch: {
@@ -220,11 +148,10 @@ var app = new Vue({
     }
 });
 
-
 // Change place by prior
 $("#prior").change(function () {
     // app.goals === localStorage
-    var t = app.goals[this.value];
+    let t = app.goals[this.value];
     app.goals[this.value] = app.goals[app.i];
     app.goals[app.i] = t;
 
@@ -237,16 +164,16 @@ function Rate(periods, payment, present, future, type, guess) {
     type = (type === undefined) ? 0 : type;
 
     // Set maximum epsilon for end of iteration
-    var epsMax = 1e-10;
+    const epsMax = 1e-10;
 
     // Set maximum number of iterations
-    var iterMax = 10;
+    const iterMax = 10;
 
     // Implement Newton's method
-    var y, y0, y1, x0, x1 = 0,
+    let y, y0, y1, x0, x1 = 0,
         f = 0,
         i = 0;
-    var rate = guess;
+    let rate = guess;
     if (Math.abs(rate) < epsMax) {
         y = present * (1 + periods * rate) + payment * (1 + rate * type) * periods + future;
     } else {
