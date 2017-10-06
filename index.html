@@ -241,7 +241,8 @@
 							</button>
 						</div>
 						<div class="col">
-							<button class="btn btn-lg btn-secondary btn-block" type="reset" onclick="if(confirm('Осторожно! Это удалит все данные (потребуется время)')){localStorage.clear(); location.reload();}">
+							<button class="btn btn-lg btn-secondary btn-block" type="reset"
+							        onclick="if(confirm('Осторожно! Это удалит все данные (потребуется время)')){localStorage.clear(); sessionStorage.clear(); location.reload();}">
 								<img src="svg/si-glyph-trash.svg" width="24">
 								Сбросить цели
 							</button>
