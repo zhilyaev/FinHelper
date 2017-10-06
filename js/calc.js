@@ -60,8 +60,8 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
     console.log('Весь срок: '+totalMoths+' months');
     // Переключатель целей
     let index = 0;
-    // Остаток
-    let remainder = 0;
+    // сука, это пенка!
+    let foam = 0;
 
     for(let i=0;i<totalMoths+1;i++){
         // Setup const
@@ -75,7 +75,11 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
         };
 
         // Цель достигнута идем к следующей
-        if(row.checked) index++;
+        if(row.checked){
+            // Собираем пенку
+            foam +=row.totalMoney-goals[index].dream;
+            index++;
+        }
 
         table.push(row)
     }
