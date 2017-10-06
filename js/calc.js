@@ -57,7 +57,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
         // Setup const
         const row = {
             date : new Date(new Date().setMonth(beginnerDate.getMonth()+i)),// Можно прибавлять к beginnerDate++
-            totalMoney: 0,
+            totalMoney: app.rightNow + app.pillowRightNow + app.reserveRightNow,
             broker: 0,
             pillow: 0,
             reserve:0,
