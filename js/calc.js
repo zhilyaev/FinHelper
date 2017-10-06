@@ -110,14 +110,13 @@ const app = new Vue({
             round = (round === undefined) ? 4 : round;
             let result = Rate(this.current.diffMonths, (-1) * this.gain, (-1) * this.rightNow, this.current.dream, 0) * periodsInYear * 100;
             if (result < 0) {
-                result = "Цель выполнится накоплением без вкладов."
+               return result = "Цель выполнится накоплением без вкладов."
             }
-            if (result > 50) {
-                result = "Выполнение цели недостижимо в данные сроки."
+            else if (result > 50) {
+               return result = "Выполнение цели недостижимо в данные сроки."
             }
-            // TODO FIX: if (isNaN(result) || this.gain===0) result = 0;
-            if (isNaN(result)) result = 0;
-            return result.toFixed(round)
+            else if (isNaN(result) || this.gain===0) result = 0;
+            else return result.toFixed(round)
         }
     },
     watch: {
