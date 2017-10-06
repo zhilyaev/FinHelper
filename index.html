@@ -144,7 +144,7 @@
 							<label for="inCom"><img src="svg/si-glyph-chart-column-increase.svg" width="26"> Доход/месяц</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="current.inCom" placeholder="60000" id="inCom">
+								<input class="form-control" min="0" type="number" v-model.number="inCom" placeholder="60000" id="inCom">
 							</div>
 						</div>
 
@@ -152,14 +152,14 @@
 							<label for="expense"><img src="svg/si-glyph-chart-column-decrease.svg" width="26"> Расход/месяц</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="current.expense" placeholder="30000" id="expense">
+								<input class="form-control" min="0" type="number" v-model.number="expense" placeholder="30000" id="expense">
 							</div>
 						</div>
 
 						<div class="col">
 							<label title="Ежемесячные сбережения">Выручка:</label>
 							<p>
-								= <b>&nbsp;{{current.cy}} {{current.gain =current.inCom - current.expense}} </b>
+								= <b>&nbsp;{{current.cy}} {{gain =inCom - expense}} </b>
 							</p>
 						</div>
 					</div>
@@ -174,7 +174,7 @@
 							<div class="input-group">
 								<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
 								<input class="form-control" v-model="current.brokerPercent" min="0" max="100" type="number" id="brokerPercent" placeholder="70">
-								<span class="input-group-addon" id="broker">{{current.broker = current.gain * current.brokerPercent/100}}</span>
+								<span class="input-group-addon" id="broker">{{current.broker = gain * current.brokerPercent/100}}</span>
 							</div>
 						</div>
 
@@ -183,7 +183,7 @@
 							<div class="input-group">
 								<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
 								<input class="form-control" min="0" max="100" type="number" v-model="current.pillowPercent" id="pillowPercent" placeholder="20">
-								<span class="input-group-addon" id="pillow">{{current.pillow = current.gain * current.pillowPercent/100}}</span>
+								<span class="input-group-addon" id="pillow">{{current.pillow = gain * current.pillowPercent/100}}</span>
 							</div>
 						</div>
 
@@ -192,7 +192,7 @@
 							<div class="input-group">
 								<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
 								<input class="form-control" min="0" max="100" type="number" v-model="current.reservePercent" id="reservePercent" placeholder="10">
-								<span class="input-group-addon" id="reserve">{{current.reserve = current.gain * current.reservePercent/100}}</span>
+								<span class="input-group-addon" id="reserve">{{current.reserve = gain * current.reservePercent/100}}</span>
 							</div>
 						</div>
 					</div>
@@ -206,7 +206,7 @@
 							</label>
 							<div class="input-group">
 								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="current.rightNow"  id="rightNow" placeholder="20000">
+								<input class="form-control" min="0" type="number" v-model.number="rightNow"  id="rightNow" placeholder="20000">
 							</div>
 						</div>
 
@@ -214,7 +214,7 @@
 							<label for="pillowRightNow" title="в финансовую подушку прямо сейчас">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 							<div class="input-group">
 								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="current.pillowRightNow" placeholder="20000"  id="pillowRightNow">
+								<input class="form-control" min="0" type="number" v-model.number="pillowRightNow" placeholder="20000"  id="pillowRightNow">
 							</div>
 						</div>
 
@@ -222,7 +222,7 @@
 							<label for="reserveRightNow" title="в резервный фонд прямо сейчас">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 							<div class="input-group">
 								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="current.reserveRightNow" placeholder="20000"  id="reserveRightNow">
+								<input class="form-control" min="0" type="number" v-model.number="reserveRightNow" placeholder="20000"  id="reserveRightNow">
 							</div>
 						</div>
 					</div>

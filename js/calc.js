@@ -11,12 +11,7 @@ const defaults = {
     // (today + 1 year).parse("YYYY-mm-dd")
     dateFinish: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
     diffMonths: 12,
-
-    /* Base */
     dream: "", // totalMoney
-    inCom: "",
-    expense: "",
-    gain: 0,
 
     /* Percent */
     broker: 0,
@@ -24,12 +19,7 @@ const defaults = {
     pillow: 0,
     pillowPercent: 20,
     reserve: 0,
-    reservePercent: 10,
-
-    /* rightNow */
-    rightNow: "",
-    pillowRightNow: "",
-    reserveRightNow: ""
+    reservePercent: 10
 
 };
 /* Str[] to goal[] */
@@ -67,10 +57,10 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
         // Setup const
         const row = {
             date : new Date(new Date().setMonth(beginnerDate.getMonth()+i)),// Можно прибавлять к beginnerDate++
-            totalMoney: goals[index].rightNow + goals[index].broker + goals[index].reserve + goals[index].gain * i,
-            broker: goals[index].rightNow+goals[index].broker * i,
-            pillow: goals[index].pillowRightNow+(goals[index].pillow * i)+'/'+ goals[index].expense * 6,
-            reserve: goals[index].reserveRightNow+(goals[index].reserve * i)+'/'+ goals[index].gain * (1.5),
+            totalMoney: 0,
+            broker: 0,
+            pillow: 0,
+            reserve:0,
             checked: goals[index].dream<this.totalMoney // Экспереминатльным путем было доказано что это не работает
         };
 
@@ -103,19 +93,28 @@ const app = new Vue({
         // Really shit is Magic Link
         goals: localStorage,
         // current index
-        i: 0
+        i: 0,
+
+        /* rightNow */
+        rightNow: "",
+        pillowRightNow: "",
+        reserveRightNow: "",
+
+        inCom: "",
+        expense: "",
+        gain: 0
     },
     computed: {
         resultPercent: function (periodsInYear) {
             periodsInYear = (periodsInYear === undefined) ? 12 : periodsInYear;
-            let result = Rate(this.current.diffMonths, (-1) * this.current.gain, (-1) * this.current.rightNow, this.current.dream, 0) * periodsInYear * 100;
+            let result = Rate(this.current.diffMonths, (-1) * this.gain, (-1) * this.rightNow, this.dream, 0) * periodsInYear * 100;
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
             }
             if (result > 50) {
                 result = "Выполнение цели недостижимо в данные сроки."
             }
-            // TODO FIX: if (isNaN(result) || this.current.gain===0) result = 0;
+            // TODO FIX: if (isNaN(result) || this.gain===0) result = 0;
             if (isNaN(result)) result = 0;
             return result
         }
@@ -178,9 +177,7 @@ function Rate(periods, payment, present, future, type, guess) {
     const iterMax = 10;
 
     // Implement Newton's method
-    let y, y0, y1, x0, x1 = 0,
-        f = 0,
-        i = 0;
+    let y, y0, y1, x0, x1 = 0, f = 0, i = 0;
     let rate = guess;
     if (Math.abs(rate) < epsMax) {
         y = present * (1 + periods * rate) + payment * (1 + rate * type) * periods + future;
