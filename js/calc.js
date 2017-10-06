@@ -108,14 +108,12 @@ const app = new Vue({
         resultPercent: function (periodsInYear,round) {
             periodsInYear = (periodsInYear === undefined) ? 12 : periodsInYear;
             round = (round === undefined) ? 4 : round;
-            let result = Rate(this.current.diffMonths, (-1) * this.gain, (-1) * this.rightNow, this.current.dream, 0) * periodsInYear * 100;
-            if (result < 0) {
-               return result = "Цель выполнится накоплением без вкладов."
-            }
-            else if (result > 50) {
-               return result = "Выполнение цели недостижимо в данные сроки."
-            }
-            else if (isNaN(result) || this.gain===0) result = 0;
+
+            let result = 25.1511512;
+
+            if (result < 0) return "Цель выполнится накоплением без вкладов";
+            else if (result > 50) return  "Выполнение цели недостижимо в данные сроки";
+            else if (isNaN(result) || this.gain===0) return 0;
             else return result.toFixed(round)
         }
     },

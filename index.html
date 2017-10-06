@@ -76,7 +76,7 @@
 				<small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций" data-placement="bottom">
 					<img src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;
 					<i>{{resultPercent}}</i>
-					<img width="32" src="svg/si-glyph-percent.svg">
+					<img v-if="resultPercent>=0" width="32" src="svg/si-glyph-percent.svg">
 				</small>
 			</h1>
 		</div>
