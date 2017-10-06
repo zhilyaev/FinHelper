@@ -106,8 +106,8 @@ const app = new Vue({
         i: 0
     },
     computed: {
-        resultPercent: function () {
-            const periodsInYear = 12;
+        resultPercent: function (periodsInYear) {
+            periodsInYear = (periodsInYear === undefined) ? 12 : periodsInYear;
             let result = Rate(this.current.diffMonths, (-1) * this.current.gain, (-1) * this.current.rightNow, this.current.dream, 0) * periodsInYear * 100;
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
