@@ -270,13 +270,13 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr class="bg-success" v-for="(n, index) in goals.calcTable()">
+						<tr v-for="(n, index) in goals.calcTable()">
 							<td headers="tableDate">{{n.date.ddmmyyyy('.')}}</td>
 							<td headers="tableTotalMoney">{{n.totalMoney}}</td>
 							<td headers="tableBroker">{{n.broker}}</td>
 							<td headers="tablePillow">{{n.pillow}}</td>
 							<td headers="tableReserve">{{n.reserve}}</td>
-							<td headers="tableChecked">{{n.checked}}</td>
+							<td headers="tableChecked" :class="{'bg-success':n.checked}">{{n.checked}}</td>
 						</tr>
 						</tbody>
 					</table>

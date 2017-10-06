@@ -59,24 +59,27 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
     const totalMoths = Date.diff(beginnerDate,finisherDate)[1];
     console.log('Весь срок: '+totalMoths+' months');
     // Переключатель целей
-    let indexOfAims = 0;
+    let index = 0;
     // Остаток
     let remainder = 0;
 
-    for(let i=0;i<totalMoths;i++){
+    for(let i=0;i<totalMoths+1;i++){
         // Setup const
         const row = {
-            date : new Date(beginnerDate.setMonth(beginnerDate.getMonth()+1)),
-            totalMoney:  0,
-            broker: 0,
-            pillow: 0,
-            reserve: 0,
-            checked: false,
+            date : new Date(new Date().setMonth(beginnerDate.getMonth()+i)),// Можно прибавлять к beginnerDate++
+            totalMoney: goals[index].rightNow + goals[index].broker + goals[index].reserve + goals[index].gain * i,
+            broker: goals[index].rightNow+goals[index].broker * i,
+            pillow: goals[index].pillowRightNow+(goals[index].pillow * i)+'/'+ goals[index].expense * 6,
+            reserve: goals[index].reserveRightNow+(goals[index].reserve * i)+'/'+ goals[index].gain * (1.5),
+            checked: goals[index].dream<this.totalMoney // Экспереминатльным путем было доказано что это не работает
         };
+
+        // Цель достигнута идем к следующей
+        if(row.checked) index++;
 
         table.push(row)
     }
-    return table;
+    return table
 };
 
 /* Remove like ListArray */
