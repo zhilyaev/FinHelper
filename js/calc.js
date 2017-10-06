@@ -67,7 +67,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
         // Цель достигнута идем к следующей
         if(row.checked){
             // Собираем пенку
-            foam +=row.totalMoney-goals[index].dream;
+
             index++;
         }
 
@@ -107,7 +107,7 @@ const app = new Vue({
     computed: {
         resultPercent: function (periodsInYear) {
             periodsInYear = (periodsInYear === undefined) ? 12 : periodsInYear;
-            let result = Rate(this.current.diffMonths, (-1) * this.gain, (-1) * this.rightNow, this.dream, 0) * periodsInYear * 100;
+            let result = Rate(this.current.diffMonths, (-1) * this.gain, (-1) * this.rightNow, this.current.dream, 0) * periodsInYear * 100;
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
             }
