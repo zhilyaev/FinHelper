@@ -84,7 +84,15 @@ Object.getPrototypeOf(localStorage).safeRemove = function (index) {
     delete this[this.length - 1]
 };
 // Primary start
-if (localStorage.length === 0) localStorage[0] = JSON.stringify(defaults);
+if (localStorage.length === 0){
+    localStorage[0] = JSON.stringify(defaults);
+    // That works and okay
+    sessionStorage["inCom"] = "";
+    sessionStorage["expense"] = "";
+    sessionStorage["rightNow"] = "";
+    sessionStorage["pillowRightNow"]="";
+    sessionStorage["reserveRightNow"]="";
+}
 let canDel = false;
 const app = new Vue({
     el: "#app",
@@ -96,12 +104,12 @@ const app = new Vue({
         i: 0,
 
         /* rightNow */
-        rightNow: "",
-        pillowRightNow: "",
-        reserveRightNow: "",
+        rightNow: sessionStorage["rightNow"],
+        pillowRightNow: sessionStorage["pillowRightNow"],
+        reserveRightNow: sessionStorage["reserveRightNow"],
 
-        inCom: "",
-        expense: "",
+        inCom: sessionStorage["inCom"],
+        expense: sessionStorage["expense"],
         gain: 0
     },
     computed: {
@@ -124,6 +132,22 @@ const app = new Vue({
                 this.goals[this.i] = JSON.stringify(this.current)
             },
             deep: true
+        },
+        // crutches
+        inCom: function () {
+            sessionStorage["inCom"] = this.inCom;
+        },
+        expense: function () {
+            sessionStorage["expense"] = this.expense;
+        },
+        rightNow: function () {
+            sessionStorage["rightNow"] = this.rightNow;
+        },
+        pillowRightNow: function () {
+            sessionStorage["pillowRightNow"] = this.pillowRightNow;
+        },
+        reserveRightNow: function () {
+            sessionStorage["reserveRightNow"] = this.reserveRightNow;
         }
     },
     methods: {
