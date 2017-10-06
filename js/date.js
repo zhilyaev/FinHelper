@@ -1,5 +1,6 @@
 // Thanks for StackOverFlow
-
+// TODO : create bicycle Date.prototype.format("YYYY-DD-MM")
+// I am lazy
 Date.prototype.yyyymmdd = function(literal) {
     var mm = this.getMonth() + 1; // getMonth() is zero-based
     var dd = this.getDate();
@@ -7,6 +8,16 @@ Date.prototype.yyyymmdd = function(literal) {
     return [this.getFullYear(),
         (mm>9 ? '' : '0') + mm,
         (dd>9 ? '' : '0') + dd
+    ].join(literal);
+};
+Date.prototype.ddmmyyyy = function (literal) {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return [
+        (dd>9 ? '' : '0') + dd,
+        (mm>9 ? '' : '0') + mm,
+        this.getFullYear()
     ].join(literal);
 };
 

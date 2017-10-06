@@ -271,7 +271,7 @@
 						</thead>
 						<tbody>
 						<tr class="bg-success" v-for="(n, index) in goals.calcTable()">
-							<td headers="tableDate">{{n.date}}</td>
+							<td headers="tableDate">{{n.date.ddmmyyyy('.')}}</td>
 							<td headers="tableTotalMoney">{{n.totalMoney}}</td>
 							<td headers="tableBroker">{{n.broker}}</td>
 							<td headers="tablePillow">{{n.pillow}}</td>
