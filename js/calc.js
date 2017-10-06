@@ -105,8 +105,9 @@ const app = new Vue({
         gain: 0
     },
     computed: {
-        resultPercent: function (periodsInYear) {
+        resultPercent: function (periodsInYear,round) {
             periodsInYear = (periodsInYear === undefined) ? 12 : periodsInYear;
+            round = (round === undefined) ? 4 : round;
             let result = Rate(this.current.diffMonths, (-1) * this.gain, (-1) * this.rightNow, this.current.dream, 0) * periodsInYear * 100;
             if (result < 0) {
                 result = "Цель выполнится накоплением без вкладов."
@@ -116,7 +117,7 @@ const app = new Vue({
             }
             // TODO FIX: if (isNaN(result) || this.gain===0) result = 0;
             if (isNaN(result)) result = 0;
-            return result
+            return result.toFixed(round)
         }
     },
     watch: {
