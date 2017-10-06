@@ -43,133 +43,176 @@
 <body>
 <br>
 <section id="app">
-<header class="container">
-	<div class="form-row">
-		<nav class="nav nav-tabs col">
-			<!-- VUE RENDER MENU -->
-			<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#">
-				<b>{{n.name}}</b> #<i>{{index+1}}</i>
-				<button v-if="goals.length!=1" type="button" class="close" @click="delTab()" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</a>
-			<!-- / VUE RENDER MENU -->
-			<a class="nav-item nav-link text-success" id="creator" href="#" @click="newTab()">
-				<img src="svg/si-glyph-folder-plus.svg" width="24">
-				<b>Новая цель</b>
-			</a>
-		</nav>
-		<div class="col-">
-			<a href="#" class="btn-primary btn btn-block"  data-toggle="modal" data-target="#modal">
-				<img src="svg/si-glyph-button-arrow-down.svg" width="26">
-				<b>PDF</b>
-			</a>
-		</div>
-	</div>
-</header>
-<section class="container">
-	<div class="card">
-		<div class="card-header">
-			<h1>
-				<img src="svg/si-glyph-square-star.svg" width="48">
-				&nbsp;{{current.name}} #{{i+1}} <wbr>
-				<small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций" data-placement="bottom">
-					<img src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;
-					<i>{{resultPercent}}</i>
-					<img v-if="resultPercent>=0" width="32" src="svg/si-glyph-percent.svg">
-				</small>
-			</h1>
-		</div>
-		<div class="card-body">
-			<fieldset>
+	<section class="container">
+		<fieldset>
+			<legend align="center"><img src="svg/si-glyph-calendar-1.svg" width="64"></legend>
+			<legend><h2 class="title">Расчет</h2></legend>
+			<br>
+			<form>
+				<!-- ROW 1 inCom -->
 				<div class="form-row">
 					<div class="col-sm">
-						<label for="prior"><b>#</b></label>
-						<label for="name" style="margin-left: 80px;">Название:</label>
+						<label for="inCom"><img src="svg/si-glyph-chart-column-increase.svg" width="26"> Доход/месяц</label>
 						<div class="input-group">
-							<div class="input-group-btn">
-								<select class="form-control custom-select" id="prior" title="Приоритет">
-									<!-- Max prior = count of goals -->
-									<option v-for="n in goals.length" :value="n-1" :selected="n==i+1">{{n}}</option>
-								</select>
-							</div>
-							<label class="input-group-addon" for="name"><img src="svg/si-glyph-square-star.svg" width="16"></label>
-							<input class="form-control" value="Цель" id="name" v-model="current.name" placeholder="На Яхту">
-						</div>
-					</div>
-
-					<div class="col-sm">
-						<label for="dream" title="Необходимая сумма для достижения цели"><img src="svg/si-glyph-piggy-bank.svg" width="26">Конечная сумма <img src="svg/si-glyph-circle-info.svg" width="16"></label>
-						<div class="input-group">
-							<div class="input-group-btn">
-								<select class="form-control custom-select" id="cy" v-model="current.cy" title="Выберите валюту">
-									<option>₽</option>
-									<option>$</option>
-									<option>€</option>
-								</select>
-							</div>
-							<input class="form-control" min="0" type="number" v-model.number="current.dream" id="dream" placeholder="10000">
-						</div>
-					</div>
-				</div>
-				<div class="form-row">
-					<div class="col-sm">
-						<label for="dateStart" title="Дата в которую будет открыт счет">Срок от <img src="svg/si-glyph-circle-info.svg" width="16"></label>
-						<div class="input-group">
-							<label class="input-group-addon" for="dateStart"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-							<input class="form-control" type="date" v-model="current.dateStart" id="dateStart">
-						</div>
-					</div>
-
-					<div class="col-sm">
-						<label for="dateFinish" title="Дата в которую будет закрыт счет">Срок до <img src="svg/si-glyph-circle-info.svg" width="16"></label>
-						<div class="input-group">
-							<label class="input-group-addon" for="dateFinish"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-							<input class="form-control" type="date" v-model="current.dateFinish" id="dateFinish">
+							<span class="input-group-addon">{{current.cy}}</span>
+							<input class="form-control" min="0" type="number" v-model.number="inCom" placeholder="60000" id="inCom">
 						</div>
 					</div>
 
 					<div class="col">
-						<label> Срок вклада (в  месяцах): </label>
+						<label for="expense"><img src="svg/si-glyph-chart-column-decrease.svg" width="26"> Расход/месяц</label>
+						<div class="input-group">
+							<span class="input-group-addon">{{current.cy}}</span>
+							<input class="form-control" min="0" type="number" v-model.number="expense" placeholder="30000" id="expense">
+						</div>
+					</div>
+
+					<div class="col">
+						<label title="Ежемесячные сбережения">Выручка:</label>
 						<p>
-							= <b> {{current.diffMonths = Date.diff(new Date(current.dateStart), new Date(current.dateFinish))[1]}}</b>
+							= <b>&nbsp;{{current.cy}} {{gain =inCom - expense}} </b>
 						</p>
 					</div>
 				</div>
-			</fieldset>
-			<br>
-			<fieldset>
-				<legend align="center"><img src="svg/si-glyph-calendar-1.svg" width="64"></legend>
-				<legend><h2 class="title">Расчет</h2></legend>
+				<!-- / ROW 1 inCom -->
+				<!-- ROW 2 RightNow -->
+				<div class="form-row">
+					<div class="col-md">
+						<label for="rightNow" title="Сколько денег вы готовы прямо сейчас инвестировать на брокерский счет?">
+							Сколько денег прямо сейчас?
+							<img src="svg/si-glyph-circle-info.svg" width="16">
+						</label>
+						<div class="input-group">
+							<span class="input-group-addon">{{current.cy}}</span>
+							<input class="form-control" min="0" type="number" v-model.number="rightNow"  id="rightNow" placeholder="20000">
+						</div>
+					</div>
+
+					<div class="col">
+						<label for="pillowRightNow" title="в финансовую подушку прямо сейчас">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+						<div class="input-group">
+							<span class="input-group-addon">{{current.cy}}</span>
+							<input class="form-control" min="0" type="number" v-model.number="pillowRightNow" placeholder="20000"  id="pillowRightNow">
+						</div>
+					</div>
+
+					<div class="col">
+						<label for="reserveRightNow" title="в резервный фонд прямо сейчас">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+						<div class="input-group">
+							<span class="input-group-addon">{{current.cy}}</span>
+							<input class="form-control" min="0" type="number" v-model.number="reserveRightNow" placeholder="20000"  id="reserveRightNow">
+						</div>
+					</div>
+				</div>
+				<!-- / ROW 2 RightNow -->
 				<br>
-				<form>
-					<!-- ROW 1 -->
+			</form>
+		</fieldset>
+	</section>
+	<header class="container">
+		<div class="form-row">
+			<nav class="nav nav-tabs col">
+				<!-- VUE RENDER MENU -->
+				<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#current">
+					<b>{{n.name}}</b> #<i>{{index+1}}</i>
+					<button v-if="goals.length!=1" type="button" class="close" @click="delTab()" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</a>
+				<!-- / VUE RENDER MENU -->
+				<a class="nav-item nav-link text-success" id="creator" href="#current" @click="newTab()">
+					<img src="svg/si-glyph-folder-plus.svg" width="24">
+					<b>Новая цель</b>
+				</a>
+				<a class="nav-item nav-link text-danger" id="trash" href="#current"
+				   onclick="if(confirm('Это действие перезапустит приложения с чистого листа')){localStorage.clear(); sessionStorage.clear(); location.reload();}">
+					<img src="svg/si-glyph-trash.svg" width="24">
+					<b>Сбросить цели</b>
+				</a>
+			</nav>
+			<div class="col-">
+				<a href="#" class="btn-primary btn btn-block"  data-toggle="modal" data-target="#modal">
+					<img src="svg/si-glyph-button-arrow-down.svg" width="26">
+					<b>PDF</b>
+				</a>
+			</div>
+		</div>
+	</header>
+	<section class="container" id="current">
+		<div class="card">
+			<div class="card-header">
+				<h1>
+					<img src="svg/si-glyph-square-star.svg" width="48">
+					&nbsp;{{current.name}} #{{i+1}} <wbr>
+					<small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций" data-placement="bottom">
+						<img src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;
+						<i>{{resultPercent}}</i>
+						<img v-if="resultPercent>=0" width="32" src="svg/si-glyph-percent.svg">
+					</small>
+				</h1>
+			</div>
+			<div class="card-body">
+				<fieldset>
+					<form>
+					<!-- / ROW 1  -->
 					<div class="form-row">
 						<div class="col-sm">
-							<label for="inCom"><img src="svg/si-glyph-chart-column-increase.svg" width="26"> Доход/месяц</label>
+							<label for="prior"><b>#</b></label>
+							<label for="name" style="margin-left: 80px;">Название:</label>
 							<div class="input-group">
-								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="inCom" placeholder="60000" id="inCom">
+								<div class="input-group-btn">
+									<select class="form-control custom-select" id="prior" title="Приоритет">
+										<!-- Max prior = count of goals -->
+										<option v-for="n in goals.length" :value="n-1" :selected="n==i+1">{{n}}</option>
+									</select>
+								</div>
+								<label class="input-group-addon" for="name"><img src="svg/si-glyph-square-star.svg" width="16"></label>
+								<input class="form-control" value="Цель" id="name" v-model="current.name" placeholder="На Яхту">
+							</div>
+						</div>
+
+						<div class="col-sm">
+							<label for="dream" title="Необходимая сумма для достижения цели"><img src="svg/si-glyph-piggy-bank.svg" width="26">Конечная сумма <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+							<div class="input-group">
+								<div class="input-group-btn">
+									<select class="form-control custom-select" id="cy" v-model="current.cy" title="Выберите валюту">
+										<option>₽</option>
+										<option>$</option>
+										<option>€</option>
+									</select>
+								</div>
+								<input class="form-control" min="0" type="number" v-model.number="current.dream" id="dream" placeholder="10000">
+							</div>
+						</div>
+					</div>
+					<!-- / ROW 1  -->
+					<!--  ROW 2 Date -->
+					<div class="form-row">
+						<div class="col-sm">
+							<label for="dateStart" title="Дата в которую будет открыт счет">Срок от <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+							<div class="input-group">
+								<label class="input-group-addon" for="dateStart"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
+								<input class="form-control" type="date" v-model="current.dateStart" id="dateStart">
+							</div>
+						</div>
+
+						<div class="col-sm">
+							<label for="dateFinish" title="Дата в которую будет закрыт счет">Срок до <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+							<div class="input-group">
+								<label class="input-group-addon" for="dateFinish"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
+								<input class="form-control" type="date" v-model="current.dateFinish" id="dateFinish">
 							</div>
 						</div>
 
 						<div class="col">
-							<label for="expense"><img src="svg/si-glyph-chart-column-decrease.svg" width="26"> Расход/месяц</label>
-							<div class="input-group">
-								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="expense" placeholder="30000" id="expense">
-							</div>
-						</div>
-
-						<div class="col">
-							<label title="Ежемесячные сбережения">Выручка:</label>
+							<label> Срок вклада (в  месяцах): </label>
 							<p>
-								= <b>&nbsp;{{current.cy}} {{gain =inCom - expense}} </b>
+								= <b> {{current.diffMonths = Date.diff(new Date(current.dateStart), new Date(current.dateFinish))[1]}}</b>
 							</p>
 						</div>
 					</div>
-					<!-- / ROW 1 -->
-					<!-- ROW 2 Percent -->
+					<!-- / ROW 2 Date -->
+					<!-- ROW 3 Percent -->
 					<div class="form-row">
 						<div class="col-md">
 							<label for="brokerPercent" title="Какой процент ежемесячных сбережений вы будете отправлять на брокерский счет">
@@ -201,58 +244,12 @@
 							</div>
 						</div>
 					</div>
-					<!-- / ROW 2 Percent -->
-					<!-- ROW 3 RightNow -->
-					<div class="form-row">
-						<div class="col-md">
-							<label for="rightNow" title="Сколько денег вы готовы прямо сейчас инвестировать на брокерский счет?">
-								Сколько денег прямо сейчас?
-								<img src="svg/si-glyph-circle-info.svg" width="16">
-							</label>
-							<div class="input-group">
-								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="rightNow"  id="rightNow" placeholder="20000">
-							</div>
-						</div>
-
-						<div class="col">
-							<label for="pillowRightNow" title="в финансовую подушку прямо сейчас">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
-							<div class="input-group">
-								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="pillowRightNow" placeholder="20000"  id="pillowRightNow">
-							</div>
-						</div>
-
-						<div class="col">
-							<label for="reserveRightNow" title="в резервный фонд прямо сейчас">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
-							<div class="input-group">
-								<span class="input-group-addon">{{current.cy}}</span>
-								<input class="form-control" min="0" type="number" v-model.number="reserveRightNow" placeholder="20000"  id="reserveRightNow">
-							</div>
-						</div>
-					</div>
-					<!-- / ROW 3 RightNow -->
-					<br>
-					<div class="form-row">
-						<div class="col">
-							<button class="btn btn-lg btn-outline-info btn-block" type="reset">
-								<img src="svg/si-glyph-arrow-circle-rycycle.svg" width="24">
-								Очистить форму
-							</button>
-						</div>
-						<div class="col">
-							<button class="btn btn-lg btn-secondary btn-block" type="reset"
-							        onclick="if(confirm('Осторожно! Это удалит все данные (потребуется время)')){localStorage.clear(); sessionStorage.clear(); location.reload();}">
-								<img src="svg/si-glyph-trash.svg" width="24">
-								Сбросить цели
-							</button>
-						</div>
-					</div>
-				</form>
-			</fieldset>
+					<!-- / ROW 3 Percent -->
+					</form>
+				</fieldset>
+			</div>
 		</div>
-	</div>
-</section>
+	</section>
 	<!-- MODAL -->
 	<div class="modal fade" id="modal">
 		<div class="modal-dialog modal-lg" role="document">
@@ -297,7 +294,7 @@
 		</div>
 	</div>
 	<!-- / MODAL -->
-</section>
+</section><!-- / app -->
 <br>
 <footer class="container">
 	<div class="row">
