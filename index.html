@@ -72,7 +72,12 @@
 		<div class="card-header">
 			<h1>
 				<img src="svg/si-glyph-square-star.svg" width="48">
-				&nbsp;{{current.name}} #{{i+1}} <wbr><small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций" data-placement="bottom"><img src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;<i>{{resultPercent.toFixed(4)}}</i><img width="32" src="svg/si-glyph-percent.svg"> </small>
+				&nbsp;{{current.name}} #{{i+1}} <wbr>
+				<small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций" data-placement="bottom">
+					<img src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;
+					<i>{{(resultPercent()).toFixed(4)}}</i>
+					<img width="32" src="svg/si-glyph-percent.svg">
+				</small>
 			</h1>
 		</div>
 		<div class="card-body">

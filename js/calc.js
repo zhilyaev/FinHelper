@@ -47,12 +47,12 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
     const finisherDate = new Date(goals[goals.length-1].dateFinish);
     // Длина всего срока
     const totalMoths = Date.diff(beginnerDate,finisherDate)[1];
-    console.log('Весь срок: '+totalMoths+' months');
+    //console.log('Весь срок: '+totalMoths+' months');
     // Переключатель целей
     let index = 0;
     // сука, это пенка!
     let foam = 0;
-
+/*
     for(let i=0;i<totalMoths+1;i++){
         // Setup const
         const row = {
@@ -72,7 +72,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
         }
 
         table.push(row)
-    }
+    }*/
     return table
 };
 
