@@ -120,7 +120,7 @@ const app = new Vue({
 
             if (result < 0) return "Цель выполнится накоплением без вкладов";
             else if (result > 50) return  "Выполнение цели недостижимо в данные сроки";
-            else if (isNaN(result) || this.gain===0) return 0;
+            else if (isNaN(result) || this.gain<=0) return 0;
             else return result.toFixed(4)*this.current.diffMonths
         }
     },
