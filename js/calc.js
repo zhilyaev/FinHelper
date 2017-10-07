@@ -1,8 +1,3 @@
-/*
-* ES 6
-* camelCase
-* */
-
 // defaults structure for goal
 const defaults = {
     cy: '₽',
@@ -55,6 +50,8 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
 /*
     for(let i=0;i<totalMoths+1;i++){
         // Setup const
+        //* @Vonvee, don`t change structure of row
+        //* don`t append or delete property
         const row = {
             date : new Date(new Date().setMonth(beginnerDate.getMonth()+i)),// Можно прибавлять к beginnerDate++
             totalMoney: 0,
@@ -93,6 +90,7 @@ if (localStorage.length === 0){
     sessionStorage["pillowRightNow"]="";
     sessionStorage["reserveRightNow"]="";
 }
+// Fix deep event for delTab
 let canDel = false;
 const app = new Vue({
     el: "#app",
@@ -113,6 +111,7 @@ const app = new Vue({
         gain: 0
     },
     computed: {
+        /* Should you make a new property in $data? */
         resultPercent: function () {
             const periodsInYear = 12;
             let result = rate(periodsInYear,  (-1) * this.current.broker, (-1)* this.rightNow, this.current.dream,0.01);
@@ -185,9 +184,7 @@ $("#prior").change(function () {
 
     app.i = this.value
 });
-function resultPercent() {
-
-}
+// СТАВКА
 function rate(paymentsPerYear, paymentAmount, presentValue, futureValue, dueEndOrBeginning, interest) {
     interest = (interest === undefined) ? 0.01 : interest;
     futureValue = (futureValue === undefined) ? 0. : futureValue;
