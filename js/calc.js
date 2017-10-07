@@ -113,16 +113,15 @@ const app = new Vue({
         gain: 0
     },
     computed: {
-        resultPercent: function (periodsInYear,round) {
-            periodsInYear = (periodsInYear === undefined) ? 12 : periodsInYear;
-            round = (round === undefined) ? 4 : round;
-
-            let result = 25.1511512;
+        resultPercent: function () {
+            const periodsInYear = 12;
+            let result = rate(periodsInYear,  (-1) * this.current.broker, (-1)* this.rightNow, this.current.dream,0.01);
+            console.log("rate = "+result);
 
             if (result < 0) return "Цель выполнится накоплением без вкладов";
             else if (result > 50) return  "Выполнение цели недостижимо в данные сроки";
             else if (isNaN(result) || this.gain===0) return 0;
-            else return result.toFixed(round)
+            else return result.toFixed(4)*this.current.diffMonths
         }
     },
     watch: {
@@ -186,44 +185,54 @@ $("#prior").change(function () {
 
     app.i = this.value
 });
+function resultPercent() {
 
-function Rate(periods, payment, present, future, type, guess) {
-    guess = (guess === undefined) ? 0.01 : guess;
-    future = (future === undefined) ? 0 : future;
-    type = (type === undefined) ? 0 : type;
+}
+function rate(paymentsPerYear, paymentAmount, presentValue, futureValue, dueEndOrBeginning, interest) {
+    interest = (interest === undefined) ? 0.01 : interest;
+    futureValue = (futureValue === undefined) ? 0. : futureValue;
+    dueEndOrBeginning = (dueEndOrBeginning === undefined) ? 0 : dueEndOrBeginning;
 
-    // Set maximum epsilon for end of iteration
-    const epsMax = 1e-10;
+    const FINANCIAL_MAX_ITERATIONS = 128;//Bet accuracy with 128
+    const FINANCIAL_PRECISION = 0.0000001;//1.0e-8
 
-    // Set maximum number of iterations
-    const iterMax = 10;
-
-    // Implement Newton's method
     let y, y0, y1, x0, x1 = 0, f = 0, i = 0;
-    let rate = guess;
-    if (Math.abs(rate) < epsMax) {
-        y = present * (1 + periods * rate) + payment * (1 + rate * type) * periods + future;
-    } else {
-        f = Math.exp(periods * Math.log(1 + rate));
-        y = present * f + payment * (1 / rate + type) * (f - 1) + future;
+    let rate = interest;
+    if (Math.abs(rate) < FINANCIAL_PRECISION)
+    {
+        y = presentValue * (1 + paymentsPerYear * rate) + paymentAmount * (1 + rate * dueEndOrBeginning) * paymentsPerYear + futureValue;
     }
-    y0 = present + payment * periods + future;
-    y1 = present * f + payment * (1 / rate + type) * (f - 1) + future;
-    i = x0 = 0;
+    else
+    {
+        f = Math.exp(paymentsPerYear * Math.log(1 + rate));
+        y = presentValue * f + paymentAmount * (1 / rate + dueEndOrBeginning) * (f - 1) + futureValue;
+    }
+    y0 = presentValue + paymentAmount * paymentsPerYear + futureValue;
+    y1 = presentValue * f + paymentAmount * (1 / rate + dueEndOrBeginning) * (f - 1) + futureValue;
+
+    // find root by Newton secant method
+    i = x0 = 0.0;
     x1 = rate;
-    while ((Math.abs(y0 - y1) > epsMax) && (i < iterMax)) {
+    while ((Math.abs(y0 - y1) > FINANCIAL_PRECISION)
+    && (i < FINANCIAL_MAX_ITERATIONS))
+    {
         rate = (y1 * x0 - y0 * x1) / (y1 - y0);
         x0 = x1;
         x1 = rate;
-        if (Math.abs(rate) < epsMax) {
-            y = present * (1 + periods * rate) + payment * (1 + rate * type) * periods + future;
-        } else {
-            f = Math.exp(periods * Math.log(1 + rate));
-            y = present * f + payment * (1 / rate + type) * (f - 1) + future;
+
+        if (Math.abs(rate) < FINANCIAL_PRECISION)
+        {
+            y = presentValue * (1 + paymentsPerYear * rate) + paymentAmount * (1 + rate * dueEndOrBeginning) * paymentsPerYear + futureValue;
         }
+        else
+        {
+            f = Math.exp(paymentsPerYear * Math.log(1 + rate));
+            y = presentValue * f + paymentAmount * (1 / rate + dueEndOrBeginning) * (f - 1) + futureValue;
+        }
+
         y0 = y1;
         y1 = y;
         ++i;
     }
-    return rate
+    return rate;
 }
