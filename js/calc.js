@@ -1,3 +1,4 @@
+"use strict";
 // defaults structure for goal
 const defaults = {
     cy: '₽',
@@ -24,11 +25,10 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
         try {
             res.push(JSON.parse(this[i]))
         } catch (e) {
-            console.log("Error index in localStorage:");
-            console.log(e)
+            console.error("Error index in localStorage:");
+            console.error(e)
         }
     }
-
     return res
 };
 /* Calc table data */
@@ -51,7 +51,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
     for(let i=0;i<totalMoths+1;i++){
         // Setup const
         //* @Vonvee, don`t change structure of row
-        //* don`t append or delete property
+        // * don`t append or delete property
         const row = {
             date : new Date(new Date().setMonth(beginnerDate.getMonth()+i)),// Можно прибавлять к beginnerDate++
             totalMoney: 0,
@@ -77,7 +77,7 @@ Object.getPrototypeOf(localStorage).calcTable = function () {
 Object.getPrototypeOf(localStorage).safeRemove = function (index) {
     for (let i = index; i < this.length; i++)
         this[i] = this[i + 1]
-
+    //
     delete this[this.length - 1]
 };
 // Primary start
@@ -131,6 +131,16 @@ const app = new Vue({
             },
             deep: true
         },
+        // Fix Percent
+        'current.brokerPercent': function(){
+            this.current.brokerPercent = fixPercent(this.current.brokerPercent,this.current.reservePercent,this.current.pillowPercent)
+        },
+        'current.pillowPercent': function(){
+            this.current.pillowPercent = fixPercent(this.current.pillowPercent,this.current.brokerPercent,this.current.reservePercent)
+        },
+        'current.reservePercent': function() {
+            this.current.reservePercent = fixPercent(this.current.reservePercent,this.current.brokerPercent,this.current.pillowPercent)
+        },
         // crutches
         inCom: function () {
             sessionStorage["inCom"] = this.inCom;
@@ -174,7 +184,14 @@ const app = new Vue({
         }
     }
 });
+function fixPercent(a,b,c) {
+    if(a==="") a=0;
 
+    let sum = a+b+c;
+    if(sum>100) a = 100 - (b + c);
+    console.log(a);
+    return a;
+}
 // Change place by prior
 $("#prior").change(function () {
     // app.goals === localStorage
