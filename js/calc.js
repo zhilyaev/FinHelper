@@ -140,8 +140,8 @@ const app = new Vue({
     computed: {
         /* Should you make a new property in $data? */
         resultPercent: function () {
-            const periodsInYear = 12;
-            let result = rate(periodsInYear,  (-1) * this.current.broker, (-1)* this.rightNow, this.current.dream,0.01);
+            let result = rate(this.current.diffMonths,  (-1) * this.current.broker, (-1)* this.rightNow, this.current.dream,0);
+            result = result.toFixed(4)*100;
             console.log("rate = "+result);
 
             if (result < 0) return "Цель выполнится накоплением без вкладов";
@@ -159,11 +159,8 @@ const app = new Vue({
             const finisherDate = new Date(goals[goals.length-1].dateFinish);
             // Длина всего срока
             const totalMoths = Date.diff(beginnerDate,finisherDate)[1];
-            //console.log('Весь срок: '+totalMoths+' months');
-            // Переключатель целей
-            let index = 0;
-            // сука, это пенка!
-            let foam = 0;
+
+            for(let i=0;i<goals.length;)
 
             for(let i=0;i<totalMoths+1;i++){
                 // Setup const
