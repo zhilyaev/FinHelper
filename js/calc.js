@@ -115,13 +115,15 @@ const app = new Vue({
     computed: {
         resultPercent: function () {
             const periodsInYear = 12;
-            let result = rate(periodsInYear,  (-1) * this.current.broker, (-1)* this.rightNow, this.current.dream,0.01);
+            let result = rate(this.current.diffMonths,  (-1) * this.current.broker, (-1)* this.rightNow, this.current.dream,0);
             console.log("rate = "+result);
 
+            result = result.toFixed(4)*100*periodsInYear
             if (result < 0) return "Цель выполнится накоплением без вкладов";
             else if (result > 50) return  "Выполнение цели недостижимо в данные сроки";
             else if (isNaN(result) || this.gain<=0) return 0;
-            else return result.toFixed(4)*this.current.diffMonths
+            else return result
+            //return rate(24,-10000,0,250000,0)*12
         }
     },
     watch: {
