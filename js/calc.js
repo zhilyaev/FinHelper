@@ -123,9 +123,9 @@ const app = new Vue({
         // current index
         i: 0,
 
-        rightNow: primaryStart ? "" : parseInt(sessionStorage.rightNow),
-        pillowRightNow:  primaryStart ? "" : parseInt(sessionStorage.pillowRightNow),
-        reserveRightNow:  primaryStart ? "" : parseInt(sessionStorage.reserveRightNow),
+        brokerBag: primaryStart ? "" : parseInt(sessionStorage.brokerBag),
+        pillowBag:  primaryStart ? "" : parseInt(sessionStorage.pillowBag),
+        reserveBag:  primaryStart ? "" : parseInt(sessionStorage.reserveBag),
 
         inCom:  primaryStart ? "" :parseInt(sessionStorage.inCom),
         expense:  primaryStart ? "" : parseInt(sessionStorage.expense),
@@ -135,7 +135,7 @@ const app = new Vue({
     computed: {
         /* Should you make a new property in $data? */
         resultPercent: function () {
-            let result = rate(this.current.diffMonths,  (-1) * this.current.broker, (-1)* this.rightNow, this.current.dream,0);
+            let result = rate(this.current.diffMonths,  (-1) * this.current.broker, (-1)* this.brokerBag, this.current.dream,0);
             result = result.toFixed(4)*100;
             console.log("rate = "+result);
 
@@ -167,13 +167,13 @@ const app = new Vue({
                     // beginnerDate++
                     beginnerDate.setMonth(beginnerDate.getMonth()+1);
                     //* @Vonvee, don`t change structure of row & don`t append or delete property
-                    console.log(this.pillowRightNow+this.reserveRightNow);
+                    console.log(this.pillowBag+this.reserveBag);
                     const row = {
                         date : beginnerDate.ddmmyyyy("."),
                         totalMoney: 0,
-                        broker:  this.rightNow+goals[i].broker*j,
-                        pillow:  this.pillowRightNow+goals[i].pillow*j,
-                        reserve: this.reserveRightNow+goals[i].reserve*j,
+                        broker:  this.brokerBag+goals[i].broker*j,
+                        pillow:  this.pillowBag+goals[i].pillow*j,
+                        reserve: this.reserveBag+goals[i].reserve*j,
                         checked: function () {
                             return this.totalMoney>goals[i].dream
                         }
@@ -188,7 +188,7 @@ const app = new Vue({
                         row.pillow = pillowMax;
                     }
 
-                    row.totalMoney = this.rightNow+this.pillowRightNow+this.reserveRightNow+
+                    row.totalMoney = this.brokerBag+this.pillowBag+this.reserveBag+
                         this.broker+this.pillow+this.reserve;
 
                     table.push(row)
@@ -222,14 +222,14 @@ const app = new Vue({
         expense: function () {
             sessionStorage.expense = this.expense
         },
-        rightNow: function () {
-            sessionStorage.rightNow = this.rightNow
+        brokerBag: function () {
+            sessionStorage.brokerBag = this.brokerBag
         },
-        pillowRightNow: function () {
-            sessionStorage.pillowRightNow = this.pillowRightNow
+        pillowBag: function () {
+            sessionStorage.pillowBag= this.pillowBag
         },
-        reserveRightNow: function () {
-            sessionStorage.reserveRightNow = this.reserveRightNow
+        reserveBag: function () {
+            sessionStorage.reserveBag = this.reserveBag
         }
     },
     methods: {

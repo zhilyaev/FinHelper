@@ -75,36 +75,36 @@
 					</div>
 				</div>
 				<!-- / ROW 1 inCom -->
-				<!-- ROW 2 RightNow -->
+				<!-- ROW 2 brokerBag -->
 				<div class="form-row">
 					<div class="col-md">
-						<label for="rightNow" title="Сколько денег вы готовы прямо сейчас инвестировать на брокерский счет?">
+						<label for="brokerBag" title="Сколько денег вы готовы прямо сейчас инвестировать на брокерский счет?">
 							Сколько денег прямо сейчас?
 							<img src="svg/si-glyph-circle-info.svg" width="16">
 						</label>
 						<div class="input-group">
 							<span class="input-group-addon">{{current.cy}}</span>
-							<input class="form-control" min="0" type="number" v-model.number="rightNow"  id="rightNow" placeholder="20000">
+							<input class="form-control" min="0" type="number" v-model.number="brokerBag"  id="brokerBag" placeholder="20000">
 						</div>
 					</div>
 
 					<div class="col">
-						<label for="pillowRightNow" title="в финансовую подушку прямо сейчас">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+						<label for="pillowBag" title="в финансовую подушку прямо сейчас">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 						<div class="input-group">
 							<span class="input-group-addon">{{current.cy}}</span>
-							<input class="form-control" min="0" type="number" v-model.number="pillowRightNow" placeholder="20000"  id="pillowRightNow">
+							<input class="form-control" min="0" type="number" v-model.number="pillowBag" placeholder="20000"  id="pillowBag">
 						</div>
 					</div>
 
 					<div class="col">
-						<label for="reserveRightNow" title="в резервный фонд прямо сейчас">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+						<label for="reserveBag" title="в резервный фонд прямо сейчас">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 						<div class="input-group">
 							<span class="input-group-addon">{{current.cy}}</span>
-							<input class="form-control" min="0" type="number" v-model.number="reserveRightNow" placeholder="20000"  id="reserveRightNow">
+							<input class="form-control" min="0" type="number" v-model.number="reserveBag" placeholder="20000"  id="reserveBag">
 						</div>
 					</div>
 				</div>
-				<!-- / ROW 2 RightNow -->
+				<!-- / ROW 2 brokerBag -->
 				<br>
 			</form>
 		</fieldset>
