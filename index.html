@@ -273,13 +273,16 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr v-for="(n, index) in calcTable()">
+						<tr v-for="(n, index) in calcTable">
 							<td headers="tableDate">{{n.date}}</td>
 							<td headers="tableTotalMoney">{{n.totalMoney}}</td>
 							<td headers="tableBroker">{{n.broker}}</td>
 							<td headers="tablePillow">{{n.pillow}}</td>
 							<td headers="tableReserve">{{n.reserve}}</td>
-							<td headers="tableChecked" :class="{'bg-success':n.checked}">{{n.checked}}</td>
+							<td headers="tableChecked" :class="{'bg-success':n.checked()}">
+								<!-- <span v-if="n.checked()"><img src="svg/si-glyph-checked.svg" width="16"></span>-->
+								<i v-if="n.checked()">Выполнена цель</i>
+							</td>
 						</tr>
 						</tbody>
 					</table>

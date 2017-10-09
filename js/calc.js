@@ -174,10 +174,7 @@ const app = new Vue({
                         pillow: this.pillowRightNow+goals[i].pillow*j,
                         reserve: this.reserveRightNow+goals[i].reserve*j,
                         checked: function () {
-                            //console.log((goals[i].broker+goals[i].pillow+goals[i].reserve)*j);
-                            const flag = this.totalMoney>goals[i].dream;
-                            if(flag) console.log("Выполненна цель №"+i);
-                            return flag
+                            return this.totalMoney>goals[i].dream
                         }
                     };
 
