@@ -153,30 +153,43 @@ const app = new Vue({
             // Конец последней цели
             const finisherDate = new Date(goals[goals.length-1].dateFinish);
             // Длина всего срока инвестировния
-            const totalMoths = Date.diff(beginnerDate,finisherDate)[1];
+            const totalMonths = Date.diff(beginnerDate,finisherDate)[1];
 
-            // Бегунок по ценям
             // goals.length*goals[i].diffMonths = totalMonths
             for(let i=0;i<goals.length;i++){
+                // Setup const MAX
+                const reserveMax = goals[i].gain * 1.5;
+                const pillowMax =  goals[i].expense * 6;
+
+
                 //Бегунок по месяцам
                 for(let j=0;j<goals[i].diffMonths;j++){
-                    // Бля ну добавьте возможность уже явное объявление типов
-
-                    // Setup const
-                    //* @Vonvee, don`t change structure of row
-                    // * don`t append or delete property
+                    // beginnerDate++
                     beginnerDate.setMonth(beginnerDate.getMonth()+1);
+                    //* @Vonvee, don`t change structure of row & don`t append or delete property
                     console.log(this.pillowRightNow+this.reserveRightNow);
                     const row = {
-                        date : beginnerDate.ddmmyyyy("."),// beginnerDate++
-                        totalMoney: this.rightNow+this.pillowRightNow+this.reserveRightNow+(goals[i].broker+goals[i].pillow+goals[i].reserve)*j,
-                        broker: this.rightNow+goals[i].broker*j,
-                        pillow: this.pillowRightNow+goals[i].pillow*j,
+                        date : beginnerDate.ddmmyyyy("."),
+                        totalMoney: 0,
+                        broker:  this.rightNow+goals[i].broker*j,
+                        pillow:  this.pillowRightNow+goals[i].pillow*j,
                         reserve: this.reserveRightNow+goals[i].reserve*j,
                         checked: function () {
                             return this.totalMoney>goals[i].dream
                         }
                     };
+
+                    if(reserveMax<row.reserve){
+                        row.pillow +=row.reserve-reserveMax;
+                        row.reserve = reserveMax;
+                    }
+                    if(pillowMax<row.pillow){
+                        row.broker +=row.pillow-pillowMax;
+                        row.pillow = pillowMax;
+                    }
+
+                    row.totalMoney = this.rightNow+this.pillowRightNow+this.reserveRightNow+
+                        this.broker+this.pillow+this.reserve;
 
                     table.push(row)
                 }
