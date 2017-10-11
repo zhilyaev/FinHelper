@@ -311,6 +311,10 @@
 <script src="js/pdf.js"></script>
 <script>
     $(function () {
+	    // Убираем скролинг
+        $("a").click(function (e) {
+            e.preventDefault();
+        });
         // Делаем красивый title
         $('[title]').tooltip();
     })
