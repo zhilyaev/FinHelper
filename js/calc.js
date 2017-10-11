@@ -25,7 +25,6 @@ Object.getPrototypeOf(localStorage).safeRemove = function (index) {
     //
     delete this[this.length - 1]
 };
-
 function fixPercent(a,b,c) {
     if(a==="") a=0; // ParseInt(a)
     let sum = a+b+c;
@@ -97,10 +96,6 @@ const defaults = {
     dateFinish: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
     diffMonths: 12,
     dream: "", // totalMoney
-
-    broker: 0,  // calculated attr
-    pillow: 0,  // calculated attr
-    reserve: 0  // calculated attr
 };
 // Primary start
 const primaryStart = localStorage.length === 0;
@@ -115,95 +110,29 @@ const app = new Vue({
         // Really shit is Magic Link
         goals: localStorage,
         // current index
-        i: 0,
-
-        brokerBag: primaryStart ? "" : parseInt(sessionStorage.brokerBag),
-        pillowBag:  primaryStart ? "" : parseInt(sessionStorage.pillowBag),
-        reserveBag:  primaryStart ? "" : parseInt(sessionStorage.reserveBag),
-
-        inCom:  primaryStart ? "" :parseInt(sessionStorage.inCom),
-        expense:  primaryStart ? "" : parseInt(sessionStorage.expense),
-        brokerPercent: primaryStart ? 70 :parseInt(sessionStorage.brokerPercent),
-        pillowPercent: 20,
-        reservePercent: 10,
-        // calculated attr
+        i:              primaryStart ? 0 :  parseInt(sessionStorage.i),
+        brokerBag:      primaryStart ? "" : parseInt(sessionStorage.brokerBag),
+        pillowBag:      primaryStart ? "" : parseInt(sessionStorage.pillowBag),
+        reserveBag:     primaryStart ? "" : parseInt(sessionStorage.reserveBag),
+        inCom:          primaryStart ? "" : parseInt(sessionStorage.inCom),
+        expense:        primaryStart ? "" : parseInt(sessionStorage.expense),
+        brokerPercent:  primaryStart ? 70 : parseInt(sessionStorage.brokerPercent),
+        pillowPercent:  primaryStart ? 20 : parseInt(sessionStorage.pillowPercent),
+        reservePercent: primaryStart ? 10 : parseInt(sessionStorage.reservePercent),
+        risk:           primaryStart ? 50 : parseInt(sessionStorage.risk),
+        // calculated attr`s
+        broker: 0,
+        pillow: 0,
+        reserve: 0,
         gain: 0
     },
     computed: {
         /* Should you make a new property in $data? */
         resultPercent: function () {
-            let result = rate(this.current.diffMonths,  (-1) * this.current.broker, (-1)* this.brokerBag, this.current.dream,0);
-            result = result.toFixed(4)*100;
-            console.log("rate = "+result);
-
-            if (result < 0) return "Цель выполнится накоплением без вкладов";
-            else if (result > 50) return  "Выполнение цели недостижимо в данные сроки";
-            else if (isNaN(result) || this.gain<=0) return 0;
-            else return result
+            return 0;
         },
         calcTable: function (){
-            const goals = this.goals.asArrayOfObj();
-            let table = [];
-
-            // Начало первой цели
-            const beginnerDate = new Date(goals[0].dateStart);
-            // Конец последней цели
-            const finisherDate = new Date(goals[goals.length-1].dateFinish);
-            // Длина всего срока инвестировния
-            const totalMonths = Date.diff(beginnerDate,finisherDate)[1];
-
-            // goals.length*goals[i].diffMonths = totalMonths
-            for(let i=0;i<goals.length;i++){
-                // Setup const MAX
-                const reserveMax = goals[i].gain * 1.5;
-                const pillowMax =  goals[i].expense * 6;
-
-                let realReserve = this.reserveBag;
-                let realPillow = this.pillowBag;
-                let realBroker = this.brokerBag;
-
-                //Бегунок по месяцам
-                for(let j=0;j<goals[i].diffMonths;j++){
-                    let gainPillow= goals[i].pillow*j+realPillow;
-                    let gainReserve = goals[i].reserve*j+realReserve;
-
-
-                    // beginnerDate++
-                    beginnerDate.setMonth(beginnerDate.getMonth()+1);
-                    //* @Vonvee, don`t change structure of row & don`t append or delete property
-                    console.log(this.pillowBag+this.reserveBag);
-                    const row = {
-                        date : beginnerDate.ddmmyyyy("."),
-                        totalMoney: 0,
-                        broker:  0,
-                        pillow:  0,
-                        reserve: 0,
-                        checked: false
-                    };
-                    // Fill reserve to MAX
-                    if(reserveMax<gainReserve){
-                        realPillow += gainReserve-reserveMax;
-                        row.reserve = reserveMax;
-                    }else row.reserve = gainReserve;
-
-                    // Fill pillow to MAX
-                    if(pillowMax<gainPillow){
-                        realBroker+= gainPillow-pillowMax;
-                        row.pillow = pillowMax;
-                    }else row.pillow= gainPillow;
-
-                    // Fill Broker
-                    row.broker = realBroker + goals[i].broker*j;
-
-                    // Fill money
-                    row.totalMoney = row.broker+row.pillow+row.reserve;
-                    console.log(row.broker+row.pillow+row.reserve+'>='+goals[i].dream);
-                    row.checked = row.totalMoney>=goals[i].dream;
-
-                    table.push(row)
-                }
-            }
-            return table
+            return [];
         }
     },
     watch: {
@@ -215,33 +144,39 @@ const app = new Vue({
             deep: true
         },
         // Fix Percent
-        'current.brokerPercent': function(){
-            this.current.brokerPercent = fixPercent(this.current.brokerPercent,this.current.reservePercent,this.current.pillowPercent)
+        brokerPercent: function(){
+            this.brokerPercent = fixPercent(this.brokerPercent,this.reservePercent,this.pillowPercent);
+            sessionStorage.brokerPercent = this.brokerPercent
         },
-        'current.pillowPercent': function(){
-            this.current.pillowPercent = fixPercent(this.current.pillowPercent,this.current.brokerPercent,this.current.reservePercent)
+        pillowPercent: function(){
+            this.pillowPercent = fixPercent(this.pillowPercent,this.reservePercent,this.brokerPercent);
+            sessionStorage.pillowPercent = this.pillowPercent
         },
-        'current.reservePercent': function() {
-            this.current.reservePercent = fixPercent(this.current.reservePercent,this.current.brokerPercent,this.current.pillowPercent)
+        reservePercent: function() {
+            this.reservePercent = fixPercent(this.reservePercent,this.pillowPercent,this.brokerPercent);
+            sessionStorage.reservePercent = this.reservePercent
         },
-        // 1, 2, 3, 4, 8 - Костыли писать не бросим!
+        // 1 2 3 4 8 Костыли писать не бросим!
         inCom: function () {
-            sessionStorage.inCom = this.inCom
+            sessionStorage.inCom = this.inCom;
         },
         expense: function () {
-            sessionStorage.expense = this.expense
+            sessionStorage.expense = this.expense;
+        },
+        risk: function () {
+            sessionStorage.risk = this.risk;
         },
         brokerBag: function () {
-            sessionStorage.brokerBag = this.brokerBag
+            sessionStorage.brokerBag = this.brokerBag;
         },
         pillowBag: function () {
-            sessionStorage.pillowBag= this.pillowBag
+            sessionStorage.pillowBag = this.pillowBag;
         },
         reserveBag: function () {
-            sessionStorage.reserveBag = this.reserveBag
+            sessionStorage.reserveBag = this.reserveBag;
         },
-        brokerPercent: function () {
-            sessionStorage.brokerPercent = this.brokerPercent
+        i: function () {
+            sessionStorage.i = this.i;
         },
 
     },
