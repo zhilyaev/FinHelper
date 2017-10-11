@@ -176,6 +176,7 @@ const app = new Vue({
             localStorage.expense = this.expense;
         },
         risk: function () {
+            if(this.risk>30) this.risk = 30;
             localStorage.risk = this.risk;
         },
         brokerBag: function () {
