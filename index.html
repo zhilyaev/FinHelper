@@ -20,7 +20,7 @@
 <section id="app">
 	<section class="container">
 		<fieldset>
-			<legend align="center"><img src="svg/si-glyph-calendar-1.svg" width="64"></legend>
+			<legend align="center"><img src="svg/si-glyph-calculator.svg" width="64"></legend>
 			<legend><h2 class="title">Расчет</h2></legend>
 			<br>
 			<form>
@@ -90,7 +90,7 @@
 						<div class="input-group">
 							<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
 							<input class="form-control" v-model.number="brokerPercent" min="0" max="100" type="number" id="brokerPercent" placeholder="70">
-							<span class="input-group-addon" id="broker">{{current.broker = gain * brokerPercent/100}}</span>
+							<span class="input-group-addon" id="broker">{{broker = gain * brokerPercent/100}}</span>
 						</div>
 					</div>
 
@@ -99,7 +99,7 @@
 						<div class="input-group">
 							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
 							<input class="form-control" min="0" max="100" type="number" v-model.number="pillowPercent" id="pillowPercent" placeholder="20">
-							<span class="input-group-addon" id="pillow">{{current.pillow = gain * pillowPercent/100}}</span>
+							<span class="input-group-addon" id="pillow">{{pillow = gain * pillowPercent/100}}</span>
 						</div>
 					</div>
 
@@ -108,7 +108,14 @@
 						<div class="input-group">
 							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
 							<input class="form-control" min="0" max="100" type="number" v-model.number="reservePercent" id="reservePercent" placeholder="10">
-							<span class="input-group-addon" id="reserve">{{current.reserve = gain * reservePercent/100}}</span>
+							<span class="input-group-addon" id="reserve">{{reserve = gain * reservePercent/100}}</span>
+						</div>
+					</div>
+					<div class="col-sm">
+						<label for="risk">Риск <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+						<div class="input-group">
+							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
+							<input class="form-control" min="0" max="100" type="number" v-model.number="risk" id="risk" placeholder="50">
 						</div>
 					</div>
 				</div>
@@ -132,16 +139,12 @@
 					<img src="svg/si-glyph-folder-plus.svg" width="24">
 					<b>Новая цель</b>
 				</a>
-				<a class="nav-item nav-link text-danger" id="trash" href="#current"
+			</nav>
+			<div class="col-">
+				<a class="btn btn-outline-danger" id="trash" href="#current"
 				   onclick="if(confirm('Это действие перезапустит приложения с чистого листа')){localStorage.clear(); sessionStorage.clear(); location.reload();}">
 					<img src="svg/si-glyph-trash.svg" width="24">
 					<b>Сбросить цели</b>
-				</a>
-			</nav>
-			<div class="col-">
-				<a href="#" class="btn-primary btn btn-block"  data-toggle="modal" data-target="#modal">
-					<img src="svg/si-glyph-button-arrow-down.svg" width="26">
-					<b>PDF</b>
 				</a>
 			</div>
 		</div>
@@ -220,6 +223,13 @@
 							</div>
 						</div>
 						<!-- / ROW 2 Date -->
+						<br>
+						<div class="form-row justify-content-lg-center">
+							<a href="#" class="btn-outline-primary btn-lg btn btn-block col-6"  data-toggle="modal" data-target="#modal">
+								<img src="svg/si-glyph-button-arrow-down.svg" width="26">
+								<b>Получить личный финасовый план</b>
+							</a>
+						</div>
 					</form>
 				</fieldset>
 			</div>
