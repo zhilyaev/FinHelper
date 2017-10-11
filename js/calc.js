@@ -242,7 +242,7 @@ const app = new Vue({
         },
         brokerPercent: function () {
             sessionStorage.brokerPercent = this.brokerPercent
-        }
+        },
 
     },
     methods: {

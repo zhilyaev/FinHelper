@@ -89,8 +89,8 @@
 						</label>
 						<div class="input-group">
 							<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
-							<input class="form-control" v-model.number="current.brokerPercent" min="0" max="100" type="number" id="brokerPercent" placeholder="70">
-							<span class="input-group-addon" id="broker">{{current.broker = gain * current.brokerPercent/100}}</span>
+							<input class="form-control" v-model.number="brokerPercent" min="0" max="100" type="number" id="brokerPercent" placeholder="70">
+							<span class="input-group-addon" id="broker">{{current.broker = gain * brokerPercent/100}}</span>
 						</div>
 					</div>
 
@@ -98,8 +98,8 @@
 						<label for="pillowPercent" title="в финансовую подушку">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 						<div class="input-group">
 							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-							<input class="form-control" min="0" max="100" type="number" v-model.number="current.pillowPercent" id="pillowPercent" placeholder="20">
-							<span class="input-group-addon" id="pillow">{{current.pillow = gain * current.pillowPercent/100}}</span>
+							<input class="form-control" min="0" max="100" type="number" v-model.number="pillowPercent" id="pillowPercent" placeholder="20">
+							<span class="input-group-addon" id="pillow">{{current.pillow = gain * pillowPercent/100}}</span>
 						</div>
 					</div>
 
@@ -107,8 +107,8 @@
 						<label for="reservePercent" title="в резервный фонд">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 						<div class="input-group">
 							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-							<input class="form-control" min="0" max="100" type="number" v-model.number="current.reservePercent" id="reservePercent" placeholder="10">
-							<span class="input-group-addon" id="reserve">{{current.reserve = gain * current.reservePercent/100}}</span>
+							<input class="form-control" min="0" max="100" type="number" v-model.number="reservePercent" id="reservePercent" placeholder="10">
+							<span class="input-group-addon" id="reserve">{{current.reserve = gain * reservePercent/100}}</span>
 						</div>
 					</div>
 				</div>
