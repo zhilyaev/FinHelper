@@ -110,7 +110,7 @@ if (primaryStart){
     localStorage.brokerPercent = 70;
     localStorage.pillowPercent = 20;
     localStorage.reservePercent = 10;
-    localStorage.risk = 50
+    localStorage.risk = 12
 }
 // Fix deep event for app=>delTab()
 let canDel = false;
