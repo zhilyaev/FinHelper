@@ -8,7 +8,7 @@
 /* Str[] to goal[] */
 Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
     let res = [];
-    for (let i = 0; i < this.length; i++) {
+    for (let i = 0; i < this.length-10; i++) {
         try {
             res.push(JSON.parse(this[i]))
         } catch (e) {
@@ -20,10 +20,10 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
 };
 /* Remove like ListArray */
 Object.getPrototypeOf(localStorage).safeRemove = function (index) {
-    for (let i = index; i < this.length; i++)
+    for (let i = index; i < this.length-10; i++)
         this[i] = this[i + 1]
     //
-    delete this[this.length - 1]
+    delete this[this.length - 11]
 };
 function fixPercent(a,b,c) {
     if(a==="") a=0; // ParseInt(a)
@@ -99,7 +99,19 @@ const defaults = {
 };
 // Primary start
 const primaryStart = localStorage.length === 0;
-if (primaryStart) localStorage[0] = JSON.stringify(defaults);
+if (primaryStart){
+    localStorage[0] = JSON.stringify(defaults);
+    localStorage.i = 0;
+    localStorage.brokerBag = "";
+    localStorage.pillowBag = "";
+    localStorage.reserveBag = "";
+    localStorage.inCom = "";
+    localStorage.expense = "";
+    localStorage.brokerPercent = 70;
+    localStorage.pillowPercent = 20;
+    localStorage.reservePercent = 10;
+    localStorage.risk = 50
+}
 // Fix deep event for app=>delTab()
 let canDel = false;
 // Global Application
@@ -110,16 +122,16 @@ const app = new Vue({
         // Really shit is Magic Link
         goals: localStorage,
         // current index
-        i:              primaryStart ? 0 :  parseInt(sessionStorage.i),
-        brokerBag:      primaryStart ? "" : parseInt(sessionStorage.brokerBag),
-        pillowBag:      primaryStart ? "" : parseInt(sessionStorage.pillowBag),
-        reserveBag:     primaryStart ? "" : parseInt(sessionStorage.reserveBag),
-        inCom:          primaryStart ? "" : parseInt(sessionStorage.inCom),
-        expense:        primaryStart ? "" : parseInt(sessionStorage.expense),
-        brokerPercent:  primaryStart ? 70 : parseInt(sessionStorage.brokerPercent),
-        pillowPercent:  primaryStart ? 20 : parseInt(sessionStorage.pillowPercent),
-        reservePercent: primaryStart ? 10 : parseInt(sessionStorage.reservePercent),
-        risk:           primaryStart ? 50 : parseInt(sessionStorage.risk),
+        i:              parseInt(localStorage.i),
+        brokerBag:      parseInt(localStorage.brokerBag),
+        pillowBag:      parseInt(localStorage.pillowBag),
+        reserveBag:     parseInt(localStorage.reserveBag),
+        inCom:          parseInt(localStorage.inCom),
+        expense:        parseInt(localStorage.expense),
+        brokerPercent:  parseInt(localStorage.brokerPercent),
+        pillowPercent:  parseInt(localStorage.pillowPercent),
+        reservePercent: parseInt(localStorage.reservePercent),
+        risk:           parseInt(localStorage.risk),
         // calculated attr`s
         broker: 0,
         pillow: 0,
@@ -146,45 +158,45 @@ const app = new Vue({
         // Fix Percent
         brokerPercent: function(){
             this.brokerPercent = fixPercent(this.brokerPercent,this.reservePercent,this.pillowPercent);
-            sessionStorage.brokerPercent = this.brokerPercent
+            localStorage.brokerPercent = this.brokerPercent
         },
         pillowPercent: function(){
             this.pillowPercent = fixPercent(this.pillowPercent,this.reservePercent,this.brokerPercent);
-            sessionStorage.pillowPercent = this.pillowPercent
+            localStorage.pillowPercent = this.pillowPercent
         },
         reservePercent: function() {
             this.reservePercent = fixPercent(this.reservePercent,this.pillowPercent,this.brokerPercent);
-            sessionStorage.reservePercent = this.reservePercent
+            localStorage.reservePercent = this.reservePercent
         },
-        // 1 2 3 4 8 Костыли писать не бросим!
+        // Один 2 3 4 8 Костыли писать не бросим!
         inCom: function () {
-            sessionStorage.inCom = this.inCom;
+            localStorage.inCom = this.inCom;
         },
         expense: function () {
-            sessionStorage.expense = this.expense;
+            localStorage.expense = this.expense;
         },
         risk: function () {
-            sessionStorage.risk = this.risk;
+            localStorage.risk = this.risk;
         },
         brokerBag: function () {
-            sessionStorage.brokerBag = this.brokerBag;
+            localStorage.brokerBag = this.brokerBag;
         },
         pillowBag: function () {
-            sessionStorage.pillowBag = this.pillowBag;
+            localStorage.pillowBag = this.pillowBag;
         },
         reserveBag: function () {
-            sessionStorage.reserveBag = this.reserveBag;
+            localStorage.reserveBag = this.reserveBag;
         },
         i: function () {
-            sessionStorage.i = this.i;
+            localStorage.i = this.i;
         },
 
     },
     methods: {
         newTab: function () {
             this.current = JSON.parse(JSON.stringify(defaults));
-            this.goals[this.goals.length] = JSON.stringify(this.current);
-            this.i = this.goals.length - 1
+            this.goals[this.goals.length-10] = JSON.stringify(this.current);
+            this.i = this.goals.length-11
         },
         delTab: function () {
             // Fix deep events

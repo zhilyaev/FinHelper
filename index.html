@@ -128,20 +128,20 @@
 		<div class="form-row">
 			<nav class="nav nav-tabs col">
 				<!-- VUE RENDER MENU -->
-				<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#current">
+				<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#">
 					<b>{{n.name}}</b> #<i>{{index+1}}</i>
-					<button v-if="goals.length!=1" type="button" class="close" @click="delTab()" aria-label="Close">
+					<button v-if="goals.length>11" type="button" class="close" @click="delTab()" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</a>
 				<!-- / VUE RENDER MENU -->
-				<a class="nav-item nav-link text-success" id="creator" href="#current" @click="newTab()">
+				<a class="nav-item nav-link text-success" id="creator" href="#" @click="newTab()">
 					<img src="svg/si-glyph-folder-plus.svg" width="24">
 					<b>Новая цель</b>
 				</a>
 			</nav>
 			<div class="col-">
-				<a class="btn btn-outline-danger" id="trash" href="#current"
+				<a class="btn btn-outline-danger" id="trash" href="#"
 				   onclick="if(confirm('Это действие перезапустит приложения с чистого листа')){localStorage.clear(); sessionStorage.clear(); location.reload();}">
 					<img src="svg/si-glyph-trash.svg" width="24">
 					<b>Сбросить цели</b>
@@ -174,7 +174,7 @@
 									<div class="input-group-btn">
 										<select class="form-control custom-select" id="prior" title="Приоритет">
 											<!-- Max prior = count of goals -->
-											<option v-for="n in goals.length" :value="n-1" :selected="n==i+1">{{n}}</option>
+											<option v-for="n in goals.length-10" :value="n-1" :selected="n==i+1">{{n}}</option>
 										</select>
 									</div>
 									<label class="input-group-addon" for="name"><img src="svg/si-glyph-square-star.svg" width="16"></label>
