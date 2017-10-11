@@ -98,19 +98,13 @@ const defaults = {
     diffMonths: 12,
     dream: "", // totalMoney
 
-    /* Percent */
     broker: 0,  // calculated attr
-    brokerPercent: 70,
     pillow: 0,  // calculated attr
-    pillowPercent: 20,
-    reserve: 0,  // calculated attr
-    reservePercent: 10
+    reserve: 0  // calculated attr
 };
 // Primary start
 const primaryStart = localStorage.length === 0;
 if (primaryStart) localStorage[0] = JSON.stringify(defaults);
-
-
 // Fix deep event for app=>delTab()
 let canDel = false;
 // Global Application
@@ -129,6 +123,9 @@ const app = new Vue({
 
         inCom:  primaryStart ? "" :parseInt(sessionStorage.inCom),
         expense:  primaryStart ? "" : parseInt(sessionStorage.expense),
+        brokerPercent: primaryStart ? 70 :parseInt(sessionStorage.brokerPercent),
+        pillowPercent: 20,
+        reservePercent: 10,
         // calculated attr
         gain: 0
     },
@@ -161,9 +158,16 @@ const app = new Vue({
                 const reserveMax = goals[i].gain * 1.5;
                 const pillowMax =  goals[i].expense * 6;
 
+                let realReserve = this.reserveBag;
+                let realPillow = this.pillowBag;
+                let realBroker = this.brokerBag;
 
                 //Бегунок по месяцам
                 for(let j=0;j<goals[i].diffMonths;j++){
+                    let gainPillow= goals[i].pillow*j+realPillow;
+                    let gainReserve = goals[i].reserve*j+realReserve;
+
+
                     // beginnerDate++
                     beginnerDate.setMonth(beginnerDate.getMonth()+1);
                     //* @Vonvee, don`t change structure of row & don`t append or delete property
@@ -171,25 +175,30 @@ const app = new Vue({
                     const row = {
                         date : beginnerDate.ddmmyyyy("."),
                         totalMoney: 0,
-                        broker:  this.brokerBag+goals[i].broker*j,
-                        pillow:  this.pillowBag+goals[i].pillow*j,
-                        reserve: this.reserveBag+goals[i].reserve*j,
-                        checked: function () {
-                            return this.totalMoney>goals[i].dream
-                        }
+                        broker:  0,
+                        pillow:  0,
+                        reserve: 0,
+                        checked: false
                     };
-
-                    if(reserveMax<row.reserve){
-                        row.pillow +=row.reserve-reserveMax;
+                    // Fill reserve to MAX
+                    if(reserveMax<gainReserve){
+                        realPillow += gainReserve-reserveMax;
                         row.reserve = reserveMax;
-                    }
-                    if(pillowMax<row.pillow){
-                        row.broker +=row.pillow-pillowMax;
-                        row.pillow = pillowMax;
-                    }
+                    }else row.reserve = gainReserve;
 
-                    row.totalMoney = this.brokerBag+this.pillowBag+this.reserveBag+
-                        this.broker+this.pillow+this.reserve;
+                    // Fill pillow to MAX
+                    if(pillowMax<gainPillow){
+                        realBroker+= gainPillow-pillowMax;
+                        row.pillow = pillowMax;
+                    }else row.pillow= gainPillow;
+
+                    // Fill Broker
+                    row.broker = realBroker + goals[i].broker*j;
+
+                    // Fill money
+                    row.totalMoney = row.broker+row.pillow+row.reserve;
+                    console.log(row.broker+row.pillow+row.reserve+'>='+goals[i].dream);
+                    row.checked = row.totalMoney>=goals[i].dream;
 
                     table.push(row)
                 }
@@ -230,7 +239,11 @@ const app = new Vue({
         },
         reserveBag: function () {
             sessionStorage.reserveBag = this.reserveBag
+        },
+        brokerPercent: function () {
+            sessionStorage.brokerPercent = this.brokerPercent
         }
+
     },
     methods: {
         newTab: function () {

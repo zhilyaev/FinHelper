@@ -6,6 +6,7 @@
 	<meta name="author" content="Дмитрий Жиляев">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/title.css">
 	<!-- Favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
@@ -13,32 +14,6 @@
 	<link rel="manifest" href="favicon/manifest.json">
 	<link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
 	<meta name="theme-color" content="#ffffff">
-	<style>
-		.title {
-			text-align: center;
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-		}
-
-		.title:before,
-		.title:after {
-			flex-grow: 1;
-			height: 1px;
-			content: '\a0';
-			background-color: #ddd;
-			position: relative;
-			top: 0.5em;
-		}
-
-		.title:before {
-			margin-right:10px;
-		}
-
-		.title:after {
-			margin-left:10px;
-		}
-	</style>
 </head>
 <body>
 <br>
@@ -105,6 +80,39 @@
 					</div>
 				</div>
 				<!-- / ROW 2 brokerBag -->
+				<!-- ROW 3 Percent -->
+				<div class="form-row">
+					<div class="col-md">
+						<label for="brokerPercent" title="Какой процент ежемесячных сбережений вы будете отправлять на брокерский счет">
+							На Брокерский счет
+							<img src="svg/si-glyph-circle-info.svg" width="16">
+						</label>
+						<div class="input-group">
+							<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
+							<input class="form-control" v-model.number="current.brokerPercent" min="0" max="100" type="number" id="brokerPercent" placeholder="70">
+							<span class="input-group-addon" id="broker">{{current.broker = gain * current.brokerPercent/100}}</span>
+						</div>
+					</div>
+
+					<div class="col-sm">
+						<label for="pillowPercent" title="в финансовую подушку">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+						<div class="input-group">
+							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
+							<input class="form-control" min="0" max="100" type="number" v-model.number="current.pillowPercent" id="pillowPercent" placeholder="20">
+							<span class="input-group-addon" id="pillow">{{current.pillow = gain * current.pillowPercent/100}}</span>
+						</div>
+					</div>
+
+					<div class="col-sm">
+						<label for="reservePercent" title="в резервный фонд">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
+						<div class="input-group">
+							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
+							<input class="form-control" min="0" max="100" type="number" v-model.number="current.reservePercent" id="reservePercent" placeholder="10">
+							<span class="input-group-addon" id="reserve">{{current.reserve = gain * current.reservePercent/100}}</span>
+						</div>
+					</div>
+				</div>
+				<!-- / ROW 3 Percent -->
 				<br>
 			</form>
 		</fieldset>
@@ -212,39 +220,6 @@
 							</div>
 						</div>
 						<!-- / ROW 2 Date -->
-						<!-- ROW 3 Percent -->
-						<div class="form-row">
-							<div class="col-md">
-								<label for="brokerPercent" title="Какой процент ежемесячных сбережений вы будете отправлять на брокерский счет">
-									На Брокерский счет
-									<img src="svg/si-glyph-circle-info.svg" width="16">
-								</label>
-								<div class="input-group">
-									<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
-									<input class="form-control" v-model.number="current.brokerPercent" min="0" max="100" type="number" id="brokerPercent" placeholder="70">
-									<span class="input-group-addon" id="broker">{{current.broker = gain * current.brokerPercent/100}}</span>
-								</div>
-							</div>
-
-							<div class="col-sm">
-								<label for="pillowPercent" title="в финансовую подушку">Подушка <img src="svg/si-glyph-circle-info.svg" width="16"></label>
-								<div class="input-group">
-									<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-									<input class="form-control" min="0" max="100" type="number" v-model.number="current.pillowPercent" id="pillowPercent" placeholder="20">
-									<span class="input-group-addon" id="pillow">{{current.pillow = gain * current.pillowPercent/100}}</span>
-								</div>
-							</div>
-
-							<div class="col-sm">
-								<label for="reservePercent" title="в резервный фонд">Резерв <img src="svg/si-glyph-circle-info.svg" width="16"></label>
-								<div class="input-group">
-									<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
-									<input class="form-control" min="0" max="100" type="number" v-model.number="current.reservePercent" id="reservePercent" placeholder="10">
-									<span class="input-group-addon" id="reserve">{{current.reserve = gain * current.reservePercent/100}}</span>
-								</div>
-							</div>
-						</div>
-						<!-- / ROW 3 Percent -->
 					</form>
 				</fieldset>
 			</div>
@@ -279,9 +254,9 @@
 							<td headers="tableBroker">{{n.broker}}</td>
 							<td headers="tablePillow">{{n.pillow}}</td>
 							<td headers="tableReserve">{{n.reserve}}</td>
-							<td headers="tableChecked" :class="{'bg-success':n.checked()}">
-								<!-- <span v-if="n.checked()"><img src="svg/si-glyph-checked.svg" width="16"></span>-->
-								<i v-if="n.checked()">Выполнена цель</i>
+							<td headers="tableChecked" :class="{'bg-success':n.checked}">
+								<!-- <span v-if="n.checked"><img src="svg/si-glyph-checked.svg" width="16"></span>-->
+								<i v-if="n.checked">Выполнена цель</i>
 							</td>
 						</tr>
 						</tbody>
