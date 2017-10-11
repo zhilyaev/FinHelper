@@ -102,11 +102,11 @@ const primaryStart = localStorage.length === 0;
 if (primaryStart){
     localStorage[0] = JSON.stringify(defaults);
     localStorage.i = 0;
-    localStorage.brokerBag = "";
-    localStorage.pillowBag = "";
-    localStorage.reserveBag = "";
-    localStorage.inCom = "";
-    localStorage.expense = "";
+    localStorage.brokerBag = 30000;
+    localStorage.pillowBag = 20000;
+    localStorage.reserveBag = 10000;
+    localStorage.inCom = 60000;
+    localStorage.expense = 10000;
     localStorage.brokerPercent = 70;
     localStorage.pillowPercent = 20;
     localStorage.reservePercent = 10;
