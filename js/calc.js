@@ -5,6 +5,11 @@
  <GLOBAL FUNCTIONS>
 
  ****************************/
+reloadApp = function () {
+    localStorage.clear();
+    sessionStorage.clear();
+    location.reload();
+};
 /* Str[] to goal[] */
 Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
     let res = [];
@@ -13,7 +18,8 @@ Object.getPrototypeOf(localStorage).asArrayOfObj = function () {
             res.push(JSON.parse(this[i]))
         } catch (e) {
             console.error("Error index in localStorage:");
-            console.error(e)
+            console.error(e);
+            reloadApp();
         }
     }
     return res
