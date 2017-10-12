@@ -142,17 +142,18 @@ const app = new Vue({
         broker: 0,
         pillow: 0,
         reserve: 0,
-        gain: 0
+        gain: 0,
+        saved: false
     },
     computed: {
         /* Should you make a new property in $data? */
         resultPercent: function () {
             return 0;
         },
-        calcTable: function (){
-            const goals = this.goals.asArrayOfObj();
+        calcTable:function () {
+            if(!this.saved){this.saved=!this.saved }
+            let goals = this.goals.asArrayOfObj();
             let table = [];
-
             // Начало первой цели
             const beginnerDate = new Date(goals[0].dateStart);
             // Конец последней цели
@@ -190,7 +191,7 @@ const app = new Vue({
                     tBroker += this.broker*j;
                     //* @Vonvee, don`t change structure of row & don`t append or delete property
                     const row = {
-                        index: i,
+                        index: i+1,
                         date : beginnerDate.ddmmyyyy("."),
                         totalMoney: tBroker+tPillow+tReserve,
                         broker:  tBroker,
@@ -214,7 +215,9 @@ const app = new Vue({
         // react saving in localStorage
         current: {
             handler: function () {
-                this.goals[this.i] = JSON.stringify(this.current)
+                this.goals[this.i] = JSON.stringify(this.current);
+                this.saved = !this.saved;
+                //console.log(this.current.dream)
             },
             deep: true
         },
@@ -279,6 +282,9 @@ const app = new Vue({
             this.current = JSON.parse(this.goals[key]);
             this.i = key
         }
+    },
+    mounted: function () {
+        this.goals = localStorage
     }
 });
 // Change place by prior
@@ -288,4 +294,7 @@ $("#prior").change(function () {
     app.goals[this.value] = app.goals[app.i];
     app.goals[app.i] = t;
     app.i = this.value
+});
+$(window).bind('storage', function (e) {
+    console.log(e.originalEvent.key, e.originalEvent.newValue);
 });

@@ -217,14 +217,14 @@
 		<div class="form-row">
 			<nav class="nav nav-tabs col">
 				<!-- VUE RENDER MENU -->
-				<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#">
+				<a class="nav-item nav-link" v-for="(n, index) in goals.asArrayOfObj()" @click="setActive(index)" :class="{'active':index==i}"  href="#" onclick="return false">
 					<b>{{n.name}}</b> #<i>{{index+1}}</i>
 					<button v-if="goals.length>11" type="button" class="close" @click="delTab()" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</a>
 				<!-- / VUE RENDER MENU -->
-				<a class="nav-item nav-link text-success" id="creator" href="#" @click="newTab()">
+				<a class="nav-item nav-link text-success" id="creator" href="#" onclick="return false" @click="newTab()">
 					<img src="svg/si-glyph-folder-plus.svg" width="24">
 					<b>Новая цель</b>
 				</a>
@@ -314,7 +314,7 @@
 						<!-- / ROW 2 Date -->
 						<br>
 						<div class="form-row justify-content-lg-center">
-							<a href="#" class="btn-outline-primary btn-lg btn btn-block col-6"  data-toggle="modal" data-target="#modal">
+							<a href="#" onclick="return false" class="btn-outline-primary btn-lg btn btn-block col-6"  data-toggle="modal" data-target="#modal">
 								<img src="svg/si-glyph-button-arrow-down.svg" width="26">
 								<b>Получить личный финасовый план</b>
 							</a>
@@ -355,7 +355,7 @@
 							<td headers="tableReserve">{{n.reserve}}</td>
 							<td headers="tableChecked" :class="{'bg-success':n.checked}">
 								<!-- <span v-if="n.checked"><img src="svg/si-glyph-checked.svg" width="16"></span>-->
-								<i v-if="n.checked">Выполнена цель</i>
+								<i v-if="n.checked">Выполнена цель {{n.index}}</i>
 							</td>
 						</tr>
 						</tbody>
@@ -371,6 +371,35 @@
 		</div>
 	</div>
 	<!-- / MODAL -->
+	<section class="container">
+		<div>
+			<table class="table table-inverse text-center">
+				<thead>
+				<tr>
+					<th nowrap>Дата</th>
+					<th >Все деньги</th>
+					<th >На брокерском счете</th>
+					<th >В подушке</th>
+					<th >В резерве</th>
+					<th >Статус</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr v-for="(n, index) in calcTable">
+					<td headers="tableDate">{{n.date}}</td>
+					<td headers="tableTotalMoney">{{n.totalMoney}}</td>
+					<td headers="tableBroker">{{n.broker}}</td>
+					<td headers="tablePillow">{{n.pillow}}</td>
+					<td headers="tableReserve">{{n.reserve}}</td>
+					<td headers="tableChecked" :class="{'bg-success':n.checked}">
+						<!-- <span v-if="n.checked"><img src="svg/si-glyph-checked.svg" width="16"></span>-->
+						<i v-if="n.checked">Выполнена цель {{n.index}}</i>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
 </section><!-- / app -->
 <br>
 <footer class="container">
@@ -400,10 +429,6 @@
 <script src="js/pdf.js"></script>
 <script>
     $(function () {
-	    // Убираем скролинг
-        $("a").click(function (e) {
-            e.preventDefault();
-        });
         // Делаем красивый title
         $('[title]').tooltip();
     })
