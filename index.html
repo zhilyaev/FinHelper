@@ -292,7 +292,7 @@
 								<label for="dateStart" title="Дата в которую будет открыт счет">Срок от <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 								<div class="input-group">
 									<label class="input-group-addon" for="dateStart"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-									<input class="form-control" type="date" v-model="current.dateStart" id="dateStart">
+									<input class="form-control" type="date" v-model.lazy="current.dateStart" id="dateStart">
 								</div>
 							</div>
 
@@ -300,7 +300,7 @@
 								<label for="dateFinish" title="Дата в которую будет закрыт счет">Дата реализации цели <img src="svg/si-glyph-circle-info.svg" width="16"></label>
 								<div class="input-group">
 									<label class="input-group-addon" for="dateFinish"><img src="svg/si-glyph-calendar-1.svg" width="16"></label>
-									<input class="form-control" type="date" v-model="current.dateFinish" id="dateFinish">
+									<input class="form-control" type="date" v-model.lazy="current.dateFinish" id="dateFinish">
 								</div>
 							</div>
 
@@ -313,13 +313,14 @@
 						</div>
 						<!-- / ROW 2 Date -->
 						<br>
-						<!--
+						<!-- button
 						<div class="form-row justify-content-lg-center">
-							<a href="#" onclick="return false" class="btn-outline-primary btn-lg btn btn-block col-6"  data-toggle="modal" data-target="#modal">
+							<a href="#" class="btn-outline-primary btn-lg btn btn-block col-6"  data-toggle="modal" data-target="#modal">
 								<img src="svg/si-glyph-button-arrow-down.svg" width="26">
 								<b>Получить личный финасовый план</b>
 							</a>
-						</div>-->
+						</div>
+						<!-- -->
 					</form>
 				</fieldset>
 			</div>
@@ -336,26 +337,29 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<table id="tablePDF" class="table table-inverse text-center">
+					<table id="tablePDF" class="table text-center table-inverse text-center">
 						<thead>
-						<tr>
-							<th id="tableDate" nowrap>Дата</th>
-							<th id="tableTotalMoney">Все деньги</th>
-							<th id="tableBroker">На брокерском счете</th>
-							<th id="tablePillow">В подушке</th>
-							<th id="tableReserve">В резерве</th>
-							<th id="tableChecked">Статус</th>
+						<tr class="text-center">
+							<th class="text-center" id="tableDate" nowrap>Дата</th>
+							<th class="text-center" id="tableTotalMoney">Все деньги</th>
+							<th class="text-center" id="tableBroker">На брокерском счете</th>
+							<th class="text-center" id="tablePillow">В подушке</th>
+							<th class="text-center" id="tableReserve">В резерве</th>
+							<th class="text-center" id="tableChecked">!</th>
 						</tr>
 						</thead>
 						<tbody>
-						<tr v-for="(n, index) in calcTable">
+						<tr v-for="(n, index) in calcTable" :class="{'bg-success':n.checked}">
 							<td headers="tableDate">{{n.date}}</td>
 							<td headers="tableTotalMoney">{{n.totalMoney}}</td>
 							<td headers="tableBroker">{{n.broker}}</td>
 							<td headers="tablePillow">{{n.pillow}}</td>
 							<td headers="tableReserve">{{n.reserve}}</td>
-							<td headers="tableChecked" :class="{'bg-success':n.checked}">
-								<i v-if="n.checked">Выполнена цель {{n.index}}</i>
+							<td headers="tableChecked">
+								<b v-if="n.checked">
+									{{n.name}} <wbr>
+									<img src="svg/si-glyph-checked.svg" width="20">
+								</b>
 							</td>
 						</tr>
 						</tbody>
@@ -380,6 +384,7 @@
 				<th class="text-center" id="tableBroker">На брокерском счете</th>
 				<th class="text-center" id="tablePillow">В подушке</th>
 				<th class="text-center" id="tableReserve">В резерве</th>
+				<th class="text-center" id="tableChecked">!</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -389,6 +394,12 @@
 				<td headers="tableBroker">{{n.broker}}</td>
 				<td headers="tablePillow">{{n.pillow}}</td>
 				<td headers="tableReserve">{{n.reserve}}</td>
+				<td headers="tableChecked">
+					<b v-if="n.checked">
+						{{n.name}} <wbr>
+						<img src="svg/si-glyph-checked.svg" width="20">
+					</b>
+				</td>
 			</tr>
 			</tbody>
 		</table>

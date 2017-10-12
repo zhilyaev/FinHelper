@@ -191,7 +191,7 @@ const app = new Vue({
                     tBroker += this.broker*j;
                     //* @Vonvee, don`t change structure of row & don`t append or delete property
                     const row = {
-                        index: i+1,
+                        name: goals[i].name,
                         date : beginnerDate.ddmmyyyy("."),
                         totalMoney: tBroker+tPillow+tReserve,
                         broker:  tBroker,
@@ -217,7 +217,6 @@ const app = new Vue({
             handler: function () {
                 this.goals[this.i] = JSON.stringify(this.current);
                 this.saved = !this.saved;
-                //console.log(this.current.dream)
             },
             deep: true
         },
@@ -294,7 +293,4 @@ $("#prior").change(function () {
     app.goals[this.value] = app.goals[app.i];
     app.goals[app.i] = t;
     app.i = this.value
-});
-$(window).bind('storage', function (e) {
-    console.log(e.originalEvent.key, e.originalEvent.newValue);
 });
