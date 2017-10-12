@@ -124,7 +124,7 @@ let canDel = false;
 const app = new Vue({
     el: "#app",
     data: {
-        current: JSON.parse(localStorage[0]),
+        current: JSON.parse(localStorage[parseInt(localStorage.i)]),
         // Really shit is Magic Link
         goals: localStorage,
         // current index
