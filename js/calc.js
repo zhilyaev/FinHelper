@@ -220,6 +220,13 @@ const app = new Vue({
             },
             deep: true
         },
+        // Hard Fix for DataStart
+        'current.dateStart': function () {
+            const today = new Date();
+            let ds = new Date(this.current.dateStart);
+            let df = new Date(this.current.dateFinish);
+            if(ds<today || ds>df) this.current.dateStart = today.yyyymmdd('-');
+        },
         // Fix Percent
         brokerPercent: function(){
             this.brokerPercent = fixPercent(this.brokerPercent,this.reservePercent,this.pillowPercent);
