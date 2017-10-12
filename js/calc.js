@@ -5,7 +5,7 @@
  <GLOBAL FUNCTIONS>
 
  ****************************/
-reloadApp = function () {
+const reloadApp = function () {
     localStorage.clear();
     sessionStorage.clear();
     location.reload();
@@ -150,7 +150,64 @@ const app = new Vue({
             return 0;
         },
         calcTable: function (){
-            return [];
+            const goals = this.goals.asArrayOfObj();
+            let table = [];
+
+            // Начало первой цели
+            const beginnerDate = new Date(goals[0].dateStart);
+            // Конец последней цели
+            const finisherDate = new Date(goals[goals.length-1].dateFinish);
+            // Длина всего срока инвестировния
+            const totalMonths = Date.diff(beginnerDate,finisherDate)[1];
+
+            let tBroker  = this.brokerBag,
+                tPillow  = this.pillowBag,
+                tReserve = this.reserveBag;
+
+            // goals.length*goals[i].diffMonths = totalMonths => O(n)
+            for(let i=0;i<goals.length;i++){
+                // Setup const MAX
+                const reserveMax = goals[i].gain * 1.5;
+                const pillowMax  = goals[i].expense * 6;
+
+                let yetChecked = false;
+                //Бегунок по месяцам
+                for(let j=0;j<goals[i].diffMonths;j++){
+                    // beginnerDate++
+                    beginnerDate.setMonth(beginnerDate.getMonth()+1);
+
+                    tReserve += this.reserve*j;
+                    if(reserveMax<tReserve){
+                        tPillow+=tReserve-reserveMax;
+                        tReserve = reserveMax;
+                    }
+
+                    tPillow += this.pillow*j;
+                    if(pillowMax<tPillow){
+                        tBroker+=tPillow-pillowMax;
+                        tPillow = pillowMax;
+                    }
+                    tBroker += this.broker*j;
+                    //* @Vonvee, don`t change structure of row & don`t append or delete property
+                    const row = {
+                        index: i,
+                        date : beginnerDate.ddmmyyyy("."),
+                        totalMoney: tBroker+tPillow+tReserve,
+                        broker:  tBroker,
+                        pillow:  tPillow,
+                        reserve: tReserve,
+                        checked: false
+                    };
+
+                    if(!yetChecked && goals[i].dream<=row.totalMoney){
+                        yetChecked = true;
+                        row.checked = true;
+                    }
+
+                    table.push(row)
+                }
+            }
+            return table
         }
     },
     watch: {
