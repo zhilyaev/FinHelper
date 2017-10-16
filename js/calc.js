@@ -116,7 +116,7 @@ if (primaryStart){
     localStorage.brokerPercent = 70;
     localStorage.pillowPercent = 20;
     localStorage.reservePercent = 10;
-    localStorage.risk = 12
+    localStorage.risk = ""
 }
 // Fix deep event for app=>delTab()
 let canDel = false;
@@ -148,7 +148,14 @@ const app = new Vue({
     computed: {
         /* Should you make a new property in $data? */
         resultPercent: function () {
-            return 0;
+            let result = rate(this.current.diffMonths,  (-1) * this.broker, (-1)* this.brokerBag, this.current.dream,0);
+            result = result.toFixed(4)*100;
+            console.log("rate = "+result);
+
+            if (result < 0) return "Цель выполнится накоплением без вкладов";
+            else if (result > this.risk) return  "Выполнение цели недостижимо в данные сроки";
+            else if (isNaN(result) || this.gain<=0) return 0;
+            else return result
         },
         calcTable:function () {
             if(!this.saved){this.saved=!this.saved }
