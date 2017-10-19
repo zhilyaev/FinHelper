@@ -148,7 +148,15 @@ const app = new Vue({
     computed: {
         /* Should you make a new property in $data? */
         resultPercent: function () {
-            let result = rate(this.current.diffMonths,  (-1) * this.broker, (-1)* this.brokerBag, this.current.dream,0);
+            const inYear = 2;
+            const years = +(this.current.diffMonths/12);
+            /* Operands for rate */
+            const kper = inYear*years;
+            const plt = (-1)* this.broker*(12/inYear);
+            const ps = (-1) * this.brokerBag;
+            const bs = this.current.dream;
+
+            let result = rate(kper,plt,ps,bs,0);
             result = result.toFixed(4)*100;
             console.log("rate = "+result);
 
