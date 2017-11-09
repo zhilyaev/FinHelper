@@ -1,4 +1,4 @@
-# ![favicon](favicon/favicon-32x32.png) Fin Helper (see [Live](http://88.201.207.180:8080/FinHelper/))
+# ![favicon](favicon/favicon-32x32.png) Fin Helper (see [Live](http://calc.teamprospect.ru/))
 web application without backend, works only by JavaScript
 
 ### TODO
