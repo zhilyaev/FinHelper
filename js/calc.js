@@ -242,6 +242,13 @@ const app = new Vue({
             let df = new Date(this.current.dateFinish);
             if(ds<today || ds>df) this.current.dateStart = today.yyyymmdd('-');
         },
+        // Hard Fix for DataFinish // todo clean
+        'current.dateFinish': function () {
+            let dsy = new Date(this.current.dateStart);
+            dsy.setMonth(dsy.getMonth()+6);
+            let df = new Date(this.current.dateFinish);
+            if(df<dsy) this.current.dateFinish = dsy.yyyymmdd('-');
+        },
         // Fix Percent
         brokerPercent: function(){
             this.brokerPercent = fixPercent(this.brokerPercent,this.reservePercent,this.pillowPercent);
