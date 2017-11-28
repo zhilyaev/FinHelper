@@ -192,19 +192,18 @@ const app = new Vue({
                     // beginnerDate++
                     beginnerDate.setMonth(beginnerDate.getMonth()+1);
 
-                    tReserve += this.reserve*j;
+                    tReserve += this.reserve;
                     if(reserveMax<tReserve){
                         tPillow+=tReserve-reserveMax;
                         tReserve = reserveMax;
                     }
 
-                    tPillow += this.pillow*j;
+                    tPillow += this.pillow;
                     if(pillowMax<tPillow){
                         tBroker+=tPillow-pillowMax;
                         tPillow = pillowMax;
                     }
-                    tBroker += this.broker*j;
-                    //* @Vonvee, don`t change structure of row & don`t append or delete property
+                    tBroker += this.broker;
                     const row = {
                         name: goals[i].name,
                         date : beginnerDate.ddmmyyyy("."),
