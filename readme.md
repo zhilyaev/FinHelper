@@ -3,8 +3,8 @@ web application without backend, works only by JavaScript
 
 ### TODO
  - [x] clean code calc.js => ResultPercent()
- - [ ] write calc.js => calcTable()
-
-#### TODO: Optimization
-1. Render loading
-2.  jsPDF fromHTML
+ - [x] write calc.js => calcTable()
+ - [x] Fix addition => calctable()
+ - [ ] WTF RATE() with Long
+ 
+P.S. Maybe can you try NodeJS?
