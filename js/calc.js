@@ -165,6 +165,12 @@ const app = new Vue({
             else if (isNaN(result) || this.gain<=0) return 0;
             else return result
         },
+        reserveMax:function () {
+            return this.gain * 1.5
+        },
+        pillowMax:function () {
+            return this.expense * 6
+        },
         calcTable:function () {
             if(!this.saved){this.saved=!this.saved }
             let goals = this.goals.asArrayOfObj();
@@ -172,9 +178,9 @@ const app = new Vue({
             // Начало первой цели
             const beginnerDate = new Date(goals[0].dateStart);
             // Конец последней цели
-            const finisherDate = new Date(goals[goals.length-1].dateFinish);
+            //const finisherDate = new Date(goals[goals.length-1].dateFinish);
             // Длина всего срока инвестировния
-            const totalMonths = Date.diff(beginnerDate,finisherDate)[1];
+            //const totalMonths = Date.diff(beginnerDate,finisherDate)[1];
 
             let tBroker  = this.brokerBag,
                 tPillow  = this.pillowBag,
@@ -182,9 +188,6 @@ const app = new Vue({
 
             // goals.length*goals[i].diffMonths = totalMonths => O(n)
             for(let i=0;i<goals.length;i++){
-                // Setup const MAX
-                const reserveMax = this.gain * 1.5;
-                const pillowMax  = this.expense * 6;
 
                 let yetChecked = false;
                 //Бегунок по месяцам
@@ -193,15 +196,15 @@ const app = new Vue({
                     beginnerDate.setMonth(beginnerDate.getMonth()+1);
 
                     tReserve += this.reserve;
-                    if(reserveMax<tReserve){
-                        tPillow+=tReserve-reserveMax;
-                        tReserve = reserveMax;
+                    if(this.reserveMax<tReserve){
+                        tPillow+=tReserve-this.reserveMax;
+                        tReserve = this.reserveMax;
                     }
 
                     tPillow += this.pillow;
-                    if(pillowMax<tPillow){
-                        tBroker+=tPillow-pillowMax;
-                        tPillow = pillowMax;
+                    if(this.pillowMax<tPillow){
+                        tBroker+=tPillow-this.pillowMax;
+                        tPillow = this.pillowMax;
                     }
                     tBroker += this.broker;
                     const row = {
