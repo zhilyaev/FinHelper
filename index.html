@@ -95,7 +95,7 @@
 						<div class="input-group">
 							<label class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></label>
 							<input class="form-control" v-model.number="brokerPercent" min="0" max="100" type="number" id="brokerPercent" placeholder="70">
-							<span class="input-group-addon" id="broker">{{broker = gain * brokerPercent/100}}</span>
+							<span class="input-group-addon" title="Ежемесячный прирост на Брокерский счет" id="broker">{{broker = gain * brokerPercent/100}}</span>
 						</div>
 					</div>
 
@@ -104,7 +104,7 @@
 						<div class="input-group">
 							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
 							<input class="form-control" min="0" max="100" type="number" v-model.number="pillowPercent" id="pillowPercent" placeholder="20">
-							<span class="input-group-addon" id="pillow">{{pillow = gain * pillowPercent/100}}</span>
+							<span class="input-group-addon" title="Ежемесячный прирост в Подушку" id="pillow">{{pillow = gain * pillowPercent/100}}</span>
 						</div>
 					</div>
 
@@ -113,7 +113,7 @@
 						<div class="input-group">
 							<span class="input-group-addon"><img src="svg/si-glyph-percent.svg" width="16"></span>
 							<input class="form-control" min="0" max="100" type="number" v-model.number="reservePercent" id="reservePercent" placeholder="10">
-							<span class="input-group-addon" id="reserve">{{reserve = gain * reservePercent/100}}</span>
+							<span class="input-group-addon" title="Ежемесячный прирост в Резерв" id="reserve">{{reserve = gain * reservePercent/100}}</span>
 						</div>
 					</div>
 					<div class="col-sm">
@@ -361,8 +361,12 @@
 				<th class="text-center" id="tableDate" nowrap>Дата</th>
 				<th class="text-center" id="tableTotalMoney">Все деньги</th>
 				<th class="text-center" id="tableBroker">На брокерском счете</th>
-				<th class="text-center" id="tablePillow">В подушке</th>
-				<th class="text-center" id="tableReserve">В резерве</th>
+				<th class="text-center" id="tablePillow">В подушке
+					<small title="Максимальное комфортное значение">(x / {{ expense * 6  }})</small>
+				</th>
+				<th class="text-center" id="tableReserve">В резерв
+					<small title="Максимальное комфортное значение">(x / {{ gain * 1.5  }})</small>
+				</th>
 				<th class="text-center" id="tableChecked">!</th>
 			</tr>
 			</thead>

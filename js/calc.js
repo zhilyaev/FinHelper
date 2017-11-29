@@ -183,8 +183,8 @@ const app = new Vue({
             // goals.length*goals[i].diffMonths = totalMonths => O(n)
             for(let i=0;i<goals.length;i++){
                 // Setup const MAX
-                const reserveMax = goals[i].gain * 1.5;
-                const pillowMax  = goals[i].expense * 6;
+                const reserveMax = this.gain * 1.5;
+                const pillowMax  = this.expense * 6;
 
                 let yetChecked = false;
                 //Бегунок по месяцам
