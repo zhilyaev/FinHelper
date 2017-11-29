@@ -236,10 +236,16 @@ const app = new Vue({
         },
         // Hard Fix for DataStart
         'current.dateStart': function () {
-            const today = new Date();
-            let ds = new Date(this.current.dateStart);
-            let df = new Date(this.current.dateFinish);
-            if(ds<today || ds>df) this.current.dateStart = today.yyyymmdd('-');
+            const ds = new Date(this.current.dateStart);
+            if(this.i>0){
+                const prev = new Date(JSON.parse(this.goals[this.i-1]).dateFinish);
+                console.log("PREV -> "+prev);
+                if(ds < prev) this.current.dateStart = prev.yyyymmdd('-');
+            } else {
+                const today = new Date();
+                let df = new Date(this.current.dateFinish);
+                if(ds<today || ds>df) this.current.dateStart = today.yyyymmdd('-');
+            }
         },
         // Hard Fix for DataFinish // todo clean
         'current.dateFinish': function () {
