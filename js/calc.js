@@ -35,7 +35,7 @@ function fixPercent(a,b,c) {
     if(a==="") a=0; // ParseInt(a)
     let sum = a+b+c;
     if(sum>100) a = 100 - (b + c);
-    console.log("FixPercent : "+a);
+    console.log("FixPercent("+a+","+b+","+c+") : "+a);
     return a
 }
 // СТАВКА
@@ -158,7 +158,7 @@ const app = new Vue({
 
             let result = rate(kper,plt,ps,bs,0);
             result = result.toFixed(4)*100;
-            console.log("rate = "+result);
+            console.log("rate("+kper+", "+plt+", "+ps+", "+bs+") = "+result);
 
             if (result < 0) return "Цель выполнится накоплением без вкладов";
             else if (result > this.risk) return  "Выполнение цели недостижимо в данные сроки";
@@ -243,7 +243,6 @@ const app = new Vue({
             const ds = new Date(this.current.dateStart);
             if(this.i>0){
                 const prev = new Date(JSON.parse(this.goals[this.i-1]).dateFinish);
-                console.log("PREV -> "+prev);
                 if(ds < prev) this.current.dateStart = prev.yyyymmdd('-');
             } else {
                 const today = new Date();
