@@ -300,7 +300,9 @@ const app = new Vue({
         newTab: function () {
             this.current = JSON.parse(JSON.stringify(defaults));
             this.goals[this.goals.length-10] = JSON.stringify(this.current);
-            this.i = this.goals.length-11
+            this.i = this.goals.length-11;
+            // Fix for direct datetime
+            this.current.dateStart = JSON.parse(this.goals[this.i-1]).dateFinish;
         },
         delTab: function () {
             // Fix deep events
