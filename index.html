@@ -305,7 +305,7 @@
 			</div>
 		</div>
 	</section>
-	<!-- MODAL
+	<!-- MODAL TODO CLEAN
 	<div class="modal fade" id="modal">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
@@ -375,8 +375,8 @@
 				<td headers="tableDate">{{n.date}}</td>
 				<td headers="tableTotalMoney">{{n.totalMoney}}</td>
 				<td headers="tableBroker">{{n.broker}}</td>
-				<td headers="tablePillow">{{n.pillow}}</td>
-				<td headers="tableReserve">{{n.reserve}}</td>
+				<td headers="tablePillow">{{n.pillow}}<span v-if="pillowMax>n.pillow">/{{ pillowMax }}</span></td>
+				<td headers="tableReserve">{{n.reserve}}<span v-if="reserveMax>n.reserve">/{{reserveMax }}</span></td>
 				<td headers="tableChecked">
 					<b v-if="n.checked">
 						{{n.name}} <wbr>
@@ -407,7 +407,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/tooltip.js"></script>
-<!-- Don`t forget make min.js -->
+<!-- TODO Don`t forget make min.js -->
 <script src="libs/bootstrap.min.js"></script>
 <script src="libs/jspdf.debug.js"></script>
 <script src="libs/vue.js"></script>

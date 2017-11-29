@@ -207,6 +207,7 @@ const app = new Vue({
                         tPillow = this.pillowMax;
                     }
                     tBroker += this.broker;
+                    // Structure return obj
                     const row = {
                         name: goals[i].name,
                         date : beginnerDate.ddmmyyyy("."),
