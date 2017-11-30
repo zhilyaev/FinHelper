@@ -204,10 +204,8 @@ const app = new Vue({
                     tBroker += this.broker;
                     if((j+1) % 6 === 0){
                         console.log("Дивиденды["+beginnerDate.ddmmyyyy('.')+']');
-                        tReserve *= (1+gainReservePerc);
-                        tPillow *= (1+gainPillowPerc);
-                        console.log("\t Подушка = "+tPillow+" + "+(1+gainPillowPerc));
-                        console.log("\t Резерв = "+tReserve+" + "+(1+gainReservePerc));
+                        console.log("\t Подушка = "+tPillow+" + "+(1+gainPillowPerc)+"%");
+                        console.log("\t Резерв = "+tReserve+" + "+(1+gainReservePerc)+"%");
                     }
 
                     // Structure return obj
