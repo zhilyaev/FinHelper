@@ -171,6 +171,7 @@ const app = new Vue({
             return this.expense * 6
         },
         calcTable:function () {
+            //console.clear();
             if(!this.saved){this.saved=!this.saved }
             let goals = this.goals.asArrayOfObj();
             let table = [];
@@ -186,9 +187,9 @@ const app = new Vue({
 
 
 
-            let tBroker  = this.brokerBag,
-                tPillow  = this.pillowBag,
-                tReserve = this.reserveBag;
+            let tBroker  = +this.brokerBag,
+                tPillow  = +this.pillowBag,
+                tReserve = +this.reserveBag;
 
             // goals.length*goals[i].diffMonths = totalMonths => O(n)
             for(let i=0;i<goals.length;i++){
@@ -204,8 +205,15 @@ const app = new Vue({
                     tBroker += this.broker;
                     if((j+1) % 6 === 0){
                         console.log("Дивиденды["+beginnerDate.ddmmyyyy('.')+']');
-                        console.log("\t Подушка = "+tPillow+" + "+(1+gainPillowPerc)+"%");
-                        console.log("\t Резерв = "+tReserve+" + "+(1+gainReservePerc)+"%");
+                        console.log("\t Подушка => "+tPillow+" + "+(1+gainPillowPerc)+"%");
+                        console.log("\t Резерв => "+tReserve+" + "+(1+gainReservePerc)+"%");
+                        console.log("\t Брокер => "+tBroker+" + "+(1+goals[i].rate/100)+"%");
+                        tBroker = Math.round(tBroker * (1+goals[i].rate/100));
+                        tPillow = Math.round(tPillow * (1+gainPillowPerc));
+                        tReserve = Math.round(tReserve * (1+gainReservePerc));
+                        console.log("\t Подушка = "+tPillow);
+                        console.log("\t Резерв = "+tReserve);
+                        console.log("\t Брокер = "+tBroker);
                     }
 
                     // Structure return obj
@@ -323,6 +331,7 @@ const app = new Vue({
         }
     },
     mounted: function () {
+        // Я не помню, почему это примонтированно?
         this.goals = localStorage
     }
 });

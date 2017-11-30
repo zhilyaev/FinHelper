@@ -23,8 +23,7 @@
 			<legend style="background-color: #2f675c; padding: 20px;" class="rounded">
 				<img src="logo/Logo-325.jpg" class="rounded float-lg-left" width="140">
 				<h1 class="text-white lead" style="font-size: 72px; margin-top: 2%;">FinHelper 1.0</h1>
-				<i class="text-white lead
-">#Simple & #Easy</i>
+				<i class="text-white lead">#Simple & #Easy</i>
 			</legend>
 			<legend><h2 class="title">Расчет</h2></legend>
 			<br>
@@ -223,7 +222,7 @@
 				<h1>
 					<img src="svg/si-glyph-square-star.svg" width="48">
 					&nbsp;{{current.name}} #{{i+1}} <wbr>
-					<small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций" data-placement="bottom">
+					<small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций за полгода" data-placement="bottom">
 						<img v-if="rate >= 0 && rate <= risk" src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;
 						<span>
 							<i v-if="rate < 0">Цель выполнится накоплением без вкладов</i>
@@ -309,55 +308,6 @@
 			</div>
 		</div>
 	</section>
-	<!-- MODAL TODO CLEAN
-	<div class="modal fade" id="modal">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h2 class="modal-title"><img src="svg/si-glyph-chart-decrease.svg" width="48"> Личный финасовый план</h2>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<table id="tablePDF" class="table text-center table-inverse text-center">
-						<thead>
-						<tr class="text-center">
-							<th class="text-center" id="tableDate" nowrap>Дата</th>
-							<th class="text-center" id="tableTotalMoney">Все деньги</th>
-							<th class="text-center" id="tableBroker">На брокерском счете</th>
-							<th class="text-center" id="tablePillow">В подушке</th>
-							<th class="text-center" id="tableReserve">В резерве</th>
-							<th class="text-center" id="tableChecked">!</th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr v-for="(n, index) in calcTable" :class="{'bg-success':n.checked}">
-							<td headers="tableDate">{{n.date}}</td>
-							<td headers="tableTotalMoney">{{n.totalMoney}}</td>
-							<td headers="tableBroker">{{n.broker}}</td>
-							<td headers="tablePillow">{{n.pillow}}</td>
-							<td headers="tableReserve">{{n.reserve}}</td>
-							<td headers="tableChecked">
-								<b v-if="n.checked">
-									{{n.name}} <wbr>
-									<img src="svg/si-glyph-checked.svg" width="20">
-								</b>
-							</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-outline-primary btn-lg btn-block" onclick="genPDF()">
-						<img src="svg/si-glyph-document-pdf.svg" width="35">
-						Скачать личный финасовый план.pdf
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- / MODAL -->
 	<section class="container">
 		<table id="tablePDF" class="table text-center table-inverse text-center">
 			<thead>
