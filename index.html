@@ -131,7 +131,7 @@
 	</section>
 	<section class="container">
 		<div class="row">
-			<div v-if="risk >=0 && risk<=5" class="col-sm">
+			<div v-if="risk >0 && risk<=5" class="col-sm">
 				<div class="card bg-secondary">
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">Облигации долгосрочные корпоративные Российские 37%</li>
@@ -224,9 +224,13 @@
 					<img src="svg/si-glyph-square-star.svg" width="48">
 					&nbsp;{{current.name}} #{{i+1}} <wbr>
 					<small class="float-lg-right text-nowrap" title="Требуемая доходность инвестиций" data-placement="bottom">
-						<img src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;
-						<i>{{resultPercent}}</i>
-						<img v-if="resultPercent>=0" width="32" src="svg/si-glyph-percent.svg">
+						<img v-if="rate >= 0 && rate <= risk" src="svg/si-glyph-air-balloon.svg" width="48"> &nbsp;
+						<span>
+							<i v-if="rate < 0">Цель выполнится накоплением без вкладов</i>
+							<i v-else-if="rate > risk">Слишком большой риск</i>
+							<i v-else>{{rate}}</i>
+						</span>
+						<img v-if="rate >= 0 && rate <= risk" width="32" src="svg/si-glyph-percent.svg">
 					</small>
 				</h1>
 			</div>
@@ -372,7 +376,7 @@
 			</thead>
 			<tbody>
 			<tr v-for="(n, index) in calcTable" :class="{'bg-success':n.checked}">
-				<td headers="tableDate">{{n.date}}</td>
+				<td headers="tableDate" :class="{'bg-primary':(index+1)%6===0}">{{n.date}}</td>
 				<td headers="tableTotalMoney">{{n.totalMoney}}</td>
 				<td headers="tableBroker">{{n.broker}}</td>
 				<td headers="tablePillow">{{n.pillow}}<span v-if="pillowMax>n.pillow">/{{ pillowMax }}</span></td>
@@ -407,13 +411,14 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/tooltip.js"></script>
-<!-- TODO Don`t forget make min.js -->
-<script src="libs/bootstrap.min.js"></script>
+<!-- TODO Don`t forget make min.js
 <script src="libs/jspdf.debug.js"></script>
-<script src="libs/vue.js"></script>
+<script src="js/pdf.js"></script>
+-->
+<script src="libs/bootstrap.min.js"></script>
+<script src="libs/vue.min.js"></script>
 <script src="js/date.js"></script>
 <script src="js/calc.js"></script>
-<script src="js/pdf.js"></script>
 <script>
     $(function () {
         // Делаем красивый title

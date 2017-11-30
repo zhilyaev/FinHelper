@@ -101,6 +101,7 @@ const defaults = {
     // (today + 1 year).parse("YYYY-mm-dd")
     dateFinish: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).yyyymmdd("-"),
     diffMonths: 12,
+    rate : 0,
     dream: "", // totalMoney
 };
 // Primary start
@@ -116,7 +117,7 @@ if (primaryStart){
     localStorage.brokerPercent = 70;
     localStorage.pillowPercent = 20;
     localStorage.reservePercent = 10;
-    localStorage.risk = ""
+    localStorage.risk = 0;
 }
 // Fix deep event for app=>delTab()
 let canDel = false;
@@ -146,8 +147,7 @@ const app = new Vue({
         saved: false
     },
     computed: {
-        /* Should you make a new property in $data? */
-        resultPercent: function () {
+        rate:function () {
             const inYear = 2;
             const years = +(this.current.diffMonths/12);
             /* Operands for rate */
@@ -157,13 +157,12 @@ const app = new Vue({
             const bs = this.current.dream;
 
             let result = rate(kper,plt,ps,bs,0);
-            result = result.toFixed(4)*100;
-            console.log("rate("+kper+", "+plt+", "+ps+", "+bs+") = "+result);
 
-            if (result < 0) return "Цель выполнится накоплением без вкладов";
-            else if (result > this.risk) return  "Выполнение цели недостижимо в данные сроки";
-            else if (isNaN(result) || this.gain<=0) return 0;
-            else return result
+            if (isNaN(result) || this.gain<=0) result = 0;
+            else result = result.toFixed(4)*100;
+            console.log("current.rate("+kper+", "+plt+", "+ps+", "+bs+") = "+result);
+            this.current.rate = result;
+            return result
         },
         reserveMax:function () {
             return this.gain * 1.5
@@ -182,6 +181,11 @@ const app = new Vue({
             // Длина всего срока инвестировния
             //const totalMonths = Date.diff(beginnerDate,finisherDate)[1];
 
+            const gainPillowPerc = 0.075/2;
+            const gainReservePerc = 0.0625/2;
+
+
+
             let tBroker  = this.brokerBag,
                 tPillow  = this.pillowBag,
                 tReserve = this.reserveBag;
@@ -196,17 +200,16 @@ const app = new Vue({
                     beginnerDate.setMonth(beginnerDate.getMonth()+1);
 
                     tReserve += this.reserve;
-                    if(this.reserveMax<tReserve){
-                        tPillow+=tReserve-this.reserveMax;
-                        tReserve = this.reserveMax;
+                    tPillow += this.pillow;
+                    tBroker += this.broker;
+                    if((j+1) % 6 === 0){
+                        console.log("Дивиденды["+beginnerDate.ddmmyyyy('.')+']');
+                        tReserve *= (1+gainReservePerc);
+                        tPillow *= (1+gainPillowPerc);
+                        console.log("\t Подушка = "+tPillow+" + "+(1+gainPillowPerc));
+                        console.log("\t Резерв = "+tReserve+" + "+(1+gainReservePerc));
                     }
 
-                    tPillow += this.pillow;
-                    if(this.pillowMax<tPillow){
-                        tBroker+=tPillow-this.pillowMax;
-                        tPillow = this.pillowMax;
-                    }
-                    tBroker += this.broker;
                     // Structure return obj
                     const row = {
                         name: goals[i].name,
